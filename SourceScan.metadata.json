@@ -1,0 +1,13 @@
+{
+  "description": "## SourceScan for NEAR\n\nVisit the solution at [SourceScan](https://sourcescan.2bb.dev).\n\n---\n\n##### **Key Features**:\n\n---\n- **Remote Compilation Server**:\n  - Contains a Docker image for Rust and TypeScript compilation.\n  - Ensures NEAR smart-contracts are reproducible in a consistent environment.\n\n---\n\n- **Import**:\n  - Directly import code from GitHub.\n  - Upload a folder containing source code.\n\n---\n\n- **Smart-Contract Lookup**:\n  - Allows users to view contract details.\n  - Source code can be accessed on GitHub or IPFS.\n\n---\n\n- **On-chain Smart-Contract**:\n  - Stores details about the compiled and deployed contract on-chain.\n\n---\n\n- **Networks**: Live on both nets.\n\n---\n\n- **Wallet Compatibility**:\n  - Integrates with mynearwallet and wallet.near.org.\n\n---\n\n- **Advanced Access Key Management**:\n  - As full access keys are required for deployment, there's an advanced system for managing these keys efficiently and easily.\n\n---\n\n- **Security Measures**:\n\n  - WASM code mismatch check.\n\n  - Deploy Transaction (Tx) check.",
+  "image": {
+    "url": "https://ipfs.io/ipfs/bafybeiegcxl662nreuyb4cfleo4hnj3kx27zqvysq3wpjy462kpcfjei3q/near-logo.png"
+  },
+  "name": "SourceScan",
+  "tags": {
+    "verifier": "",
+    "smart-contract": "",
+    "code": "",
+    "app": ""
+  }
+}
