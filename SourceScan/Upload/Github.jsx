@@ -29,6 +29,7 @@ State.init({
   selectedBranch: null,
   selectedPage: 1,
   commits: null,
+  selectedCommit: null,
 });
 
 const Stack = styled.div`
@@ -38,10 +39,19 @@ const Stack = styled.div`
   text-align: center;
   align-items: center;
   justify-content: center;
-  gap: 25px;
+  gap: 35px;
 `;
 
 const HStack = styled.div`
+  display: flex;
+  flex-direction: row;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  gap: 25px;
+`;
+
+const Commit = styled.div`
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -64,7 +74,7 @@ const CommitsContainer = styled.div`
   justify-content: space-between;
 `;
 
-const Commit = styled.div`
+const CommitInfo = styled.div`
   width: 100%;
   display: flex;
   padding: 15px;
@@ -124,6 +134,39 @@ const Select = styled.select`
   }
 `;
 
+const Button = styled.button`
+  height: 36px;
+  width: 96px;
+  font-weight: 600;
+  border-radius: 6px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border: 1px dashed ${state.theme.border};
+  color: ${state.theme.color};
+  background-color: ${state.theme.bg};
+  transition: background-color 0.1s ease-in-out;
+
+  :hover {
+    background-color: ${state.theme.hover.bg};
+  }
+`;
+
+const RButton = styled.button`
+  background-color: ${state.theme.bg};
+  border: 1px solid ${state.theme.border};
+  width: 20px;
+  height: 20px;
+  border-radius: 50px;
+`;
+
+const SelectedRButton = styled.button`
+  background-color: ${state.theme.border};
+  border: 1px solid ${state.theme.border};
+  width: 20px;
+  height: 20px;
+  border-radius: 50px;
+`;
+
 const clearState = () => {
   State.update({
     loading: false,
@@ -163,7 +206,7 @@ const handleSubmit = (value) => {
     });
 };
 
-const getBranches = async (user, repo) => {
+const getBranches = async () => {
   asyncFetch(
     `https://api.github.com/repos/${state.user.name}/${state.repo.name}/branches`,
     {
@@ -231,6 +274,14 @@ const handleSelectChange = (e) => {
   });
 };
 
+const handleCommitSelect = (commit) => {
+  State.update({
+    selectedCommit: commit,
+  });
+};
+
+const handleImport = () => {};
+
 const truncateStringInMiddle = (str, maxLength) => {
   if (str.length <= maxLength) {
     return str;
@@ -260,13 +311,22 @@ return (
     </SearchStack>
     {!state.loading && state.repo && state.user ? (
       <Stack>
-        <Widget
-          src={`${state.ownerId}/widget/SourceScan.Common.Github.GithubLink`}
-          props={{
-            github: { owner: state.user?.name, repo: state.repo?.name },
-            theme: { color: state.theme.color, heading: state.theme.heading },
-          }}
-        />
+        <HStack>
+          <Widget
+            src={`${state.ownerId}/widget/SourceScan.Common.Github.GithubLink`}
+            props={{
+              github: {
+                owner: state.user?.name,
+                repo: state.repo?.name,
+                sha: state.selectedCommit?.sha,
+              },
+              theme: { color: state.theme.color, heading: state.theme.heading },
+            }}
+          />
+          {state.selectedCommit ? (
+            <Button onClick={handleImport}>Import</Button>
+          ) : null}
+        </HStack>
         {state.branches ? (
           <Select onChange={(e) => handleSelectChange(e)}>
             {state.branches.map((branch, i) => (
@@ -283,15 +343,20 @@ return (
         {state.commits ? (
           <CommitsContainer>
             {state.commits.map((commit, i) => (
-              <HStack key={i}>
+              <Commit key={i}>
+                {state.selectedCommit.sha === commit.sha ? (
+                  <SelectedRButton onClick={() => handleCommitSelect(commit)} />
+                ) : (
+                  <RButton onClick={() => handleCommitSelect(commit)} />
+                )}
                 <Text>{commit.date.toLocaleDateString()}</Text>
-                <Commit>
+                <CommitInfo>
                   <MHeading>"{commit.message}"</MHeading>
                   <Text>{" by "}</Text>
                   <Text>{commit.author}</Text>
                   <Heading>({truncateStringInMiddle(commit.sha, 12)})</Heading>
-                </Commit>
-              </HStack>
+                </CommitInfo>
+              </Commit>
             ))}
           </CommitsContainer>
         ) : null}
