@@ -1,16 +1,3 @@
-const pages = [
-  {
-    label: "SourceScan",
-    href: `#/${state.ownerId}/widget/SourceScan?page=upload`,
-    target: "_self",
-  },
-  {
-    label: "Contracts",
-    href: `#/${state.ownerId}/widget/SourceScan`,
-    target: "_self",
-  },
-];
-
 const useNetwork = (mainnet, testnet) => {
   return context.networkId === "mainnet" ? mainnet : testnet;
 };
@@ -18,6 +5,22 @@ const useNetwork = (mainnet, testnet) => {
 const useThemeName = (light, dark) => {
   return state.theme.name === "light" ? light : dark;
 };
+
+const pages = [
+  {
+    label: "SourceScan",
+    href: useNetwork(
+      "https://sourcescan.2bb.dev",
+      "https://sourcescan.testnet.2bb.dev"
+    ),
+    target: "_blank",
+  },
+  {
+    label: "Contracts",
+    href: `#/${state.ownerId}/widget/SourceScan`,
+    target: "_self",
+  },
+];
 
 State.init({
   theme: props.theme || {
