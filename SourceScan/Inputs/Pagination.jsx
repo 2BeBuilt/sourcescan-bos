@@ -1,51 +1,42 @@
 State.init({
-  theme: props.theme || "light",
+  theme: props.theme || {
+    name: "light",
+    bg: "#e3e8ef",
+    color: "#4c5566",
+    border: "#748094",
+    button: {
+      bg: "#eef2f6",
+    },
+    hover: {
+      bg: "#eef2f6",
+      border: "#d8dfe7",
+    },
+  },
   pages: props.pages || 1,
   selectedPage: props.selectedPage || 1,
 });
 
-const dark = {
-  bg: "#28282b",
-  color: "#e6eaee",
-  border: "#748094",
-  button: {
-    bg: "#39393c",
-    hoverBg: "#4b4b4b",
-  },
-};
-
-const light = {
-  bg: "#e3e8ef",
-  color: "#4c5566",
-  border: "#748094",
-  button: {
-    bg: "#eef2f6",
-    hoverBg: "#e3e8ef",
-  },
-};
-
-const useTheme = (light, dark) => {
-  return state.theme === "light" ? light : dark;
-};
-
 const HStack = styled.div`
   display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
   flex-direction: row;
   gap: 5px;
 `;
 
 const PageButton = styled.button`
   font-weight: 600;
-  width: 44px;
-  height: 44px;
+  width: 32px;
+  height: 32px;
   border-radius: 5px;
-  border: 1px solid transparent;
-  color: ${useTheme(light.color, dark.color)};
-  background-color: ${useTheme(light.button.bg, dark.button.bg)};
+  border: 1px solid ${state.theme.border};
+  color: ${state.theme.color};
+  background-color: ${state.theme.bg};
   transition: background-color 0.1s ease-in-out;
 
   :hover {
-    background-color: ${useTheme(light.button.hoverBg, dark.button.hoverBg)};
+    background-color: ${state.theme.hover.bg};
   }
 `;
 
