@@ -6,9 +6,6 @@ State.init({
     bg: "#e3e8ef",
     color: "#4c5566",
     border: "#748094",
-    button: {
-      bg: "#eef2f6",
-    },
     hover: {
       bg: "#eef2f6",
     },

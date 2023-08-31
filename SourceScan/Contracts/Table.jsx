@@ -4,7 +4,16 @@ const useNetwork = (mainnet, testnet) => {
 
 State.init({
   contracts: props.contracts,
-  theme: props.theme || "light",
+  theme: props.theme || {
+    name: "light",
+    bg: "#e3e8ef",
+    color: "#4c5566",
+    border: "#748094",
+    hover: {
+      bg: "#eef2f6",
+      border: "#d8dfe7",
+    },
+  },
   ownerId: useNetwork("sourcescan.near", "sourcescan.testnet"),
 });
 
@@ -12,30 +21,6 @@ if (props.contracts)
   State.update({
     contracts: props.contracts,
   });
-
-const dark = {
-  bg: "#28282b",
-  color: "#e6eaee",
-  border: "#748094",
-  button: {
-    bg: "#39393c",
-    hoverBg: "#5e5e60",
-  },
-};
-
-const light = {
-  bg: "#e3e8ef",
-  color: "#4c5566",
-  border: "#748094",
-  button: {
-    bg: "#eef2f6",
-    hoverBg: "#e3e8ef",
-  },
-};
-
-const useTheme = (light, dark) => {
-  return state.theme === "light" ? light : dark;
-};
 
 const Center = styled.div`
   display: flex;
@@ -45,9 +30,9 @@ const Center = styled.div`
 `;
 
 const Table = styled.table`
-  border: 1px solid ${useTheme(light.border, dark.border)};
-  background-color: ${useTheme(light.bg, dark.bg)};
-  color: ${useTheme(light.color, dark.color)};
+  border: 1px solid ${state.theme.border};
+  background-color: ${state.theme.bg};
+  color: ${state.theme.color};
   border-collapse: separate;
   border-spacing: 0;
   border-radius: 10px;
@@ -58,7 +43,7 @@ const Table = styled.table`
     text-transform: uppercase;
     font-size: 12px;
     font-weight: 100;
-    color: ${useTheme(light.border, dark.border)};
+    color: ${state.theme.border};
   }
 
   th {
@@ -66,7 +51,7 @@ const Table = styled.table`
   }
 
   td {
-    border-top: 0.5px dashed ${useTheme(light.border, dark.border)};
+    border-top: 0.5px dashed ${state.theme.border};
     padding: 15px;
   }
 
@@ -86,7 +71,7 @@ const Table = styled.table`
       border-radius: 10px;
       display: block;
       width: full;
-      border: 1px solid ${useTheme(light.border, dark.border)};
+      border: 1px solid ${state.theme.border};
       margin-bottom: 40px;
     }
 
@@ -106,7 +91,7 @@ const Table = styled.table`
       padding-right: 20px;
       font-size: 12px;
       font-weight: 100;
-      color: ${useTheme(light.border, dark.border)};
+      color: ${state.theme.border};
       font-weight: bold;
       text-align: start;
     }
@@ -140,11 +125,11 @@ const Mobile = styled.div`
 
 const A = styled.a`
   text-decoration: none;
-  color: ${useTheme(light.color, dark.color)};
+  color: ${state.theme.color};
 
   :hover {
     text-decoration: none;
-    color: ${useTheme(light.color, dark.color)};
+    color: ${state.theme.color};
   }
 `;
 
@@ -156,9 +141,9 @@ const Button = styled.a`
   border-radius: 6px;
   padding-top: 5px;
   padding-bottom: 5px;
-  border: 1px solid transparent;
-  color: ${useTheme(light.color, dark.color)};
-  background-color: ${useTheme(light.button.bg, dark.button.bg)};
+  border: 1px dashed ${state.theme.border};
+  color: ${state.theme.color};
+  background-color: ${state.theme.bg};
   transition: background-color 0.1s ease-in-out;
 
   &:hover,
@@ -166,10 +151,10 @@ const Button = styled.a`
     background: #ecedee;
     text-decoration: none;
     outline: none;
-    color: ${useTheme(light.color, dark.color)};
+    color: ${state.theme.color};
   }
   :hover {
-    background-color: ${useTheme(light.button.hoverBg, dark.button.hoverBg)};
+    background-color: ${state.theme.hover.bg};
   }
 `;
 

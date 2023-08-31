@@ -4,9 +4,6 @@ State.init({
     bg: "#e3e8ef",
     color: "#4c5566",
     border: "#748094",
-    button: {
-      bg: "#eef2f6",
-    },
     hover: {
       bg: "#eef2f6",
       border: "#d8dfe7",
@@ -14,6 +11,10 @@ State.init({
   },
   value: props.value || "",
 });
+
+const useThemeName = (light, dark) => {
+  return state.theme.name === "light" ? light : dark;
+};
 
 const handleChange = (e) => {
   State.update({ value: e.target.value });
@@ -50,7 +51,7 @@ const SearchButton = styled.button`
   border-radius: 6px;
   padding-top: 5px;
   padding-bottom: 5px;
-  border: 1px solid ${state.theme.border};
+  border: 1px dashed ${state.theme.border};
   color: ${state.theme.color};
   background-color: ${state.theme.bg};
   transition: background-color 0.1s ease-in-out;

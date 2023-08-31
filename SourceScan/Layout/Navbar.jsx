@@ -25,9 +25,6 @@ State.init({
     bg: "#e3e8ef",
     color: "#4c5566",
     border: "#748094",
-    button: {
-      bg: "#eef2f6",
-    },
   },
   ownerId: useNetwork("sourcescan.near", "sourcescan.testnet"),
 });
@@ -74,7 +71,7 @@ const NavButton = styled.button`
   transition: background-color 0.1s ease-in-out;
 
   :hover {
-    background-color: ${state.theme.button.bg};
+    background-color: ${state.theme.hover.bg};
   }
 `;
 

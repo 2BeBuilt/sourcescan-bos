@@ -47,11 +47,8 @@ const dark = {
   bg: "#28282b",
   color: "#e6eaee",
   border: "#748094",
-  button: {
-    bg: "#39393c",
-  },
   hover: {
-    bg: "#4b4b4b",
+    bg: "#39393c",
     border: "#4e5460",
   },
 };
@@ -61,9 +58,6 @@ const light = {
   bg: "#e3e8ef",
   color: "#4c5566",
   border: "#748094",
-  button: {
-    bg: "#eef2f6",
-  },
   hover: {
     bg: "#eef2f6",
     border: "#d8dfe7",
@@ -217,7 +211,7 @@ const pages = {
       <Widget
         src={`${state.config.ownerId}/widget/SourceScan.Contracts.Table`}
         props={{
-          theme: state.theme,
+          theme: useTheme(light, dark),
           contracts: state.contracts,
           rpcUrl: state.config.rpcUrl,
           apiHost: state.config.apiHost,
