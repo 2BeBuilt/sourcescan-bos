@@ -44,7 +44,7 @@ const handleSubmit = (value) => {
   })
     .then((res) => {
       if (res.status !== 200) {
-        State.update({ error: true });
+        State.update({ user: null, repo: null, error: true });
       } else {
         State.update({
           user: {
