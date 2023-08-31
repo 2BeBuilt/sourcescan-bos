@@ -4,13 +4,31 @@ const useNetwork = (mainnet, testnet) => {
 
 State.init({
   ownerId: useNetwork("sourcescan.near", "sourcescan.testnet"),
-  theme: props.theme || light,
+  theme: props.theme || {
+    name: "light",
+    bg: "#e3e8ef",
+    color: "#4c5566",
+    border: "#748094",
+    hover: {
+      bg: "#eef2f6",
+      border: "#d8dfe7",
+    },
+    text: {
+      fontSize: "16px",
+    },
+    heading: {
+      fontSize: "18px",
+      fontWeight: "600",
+    },
+  },
   loading: false,
   error: false,
   user: null,
   repo: null,
   branches: null,
   selectedBranch: null,
+  selectedPage: 1,
+  commits: null,
 });
 
 const Stack = styled.div`
@@ -20,6 +38,39 @@ const Stack = styled.div`
   text-align: center;
   align-items: center;
   justify-content: center;
+  gap: 25px;
+`;
+
+const HStack = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  text-align: center;
+  align-items: center;
+  justify-content: space-between;
+  gap: 25px;
+  border-bottom: 1px dashed ${state.theme.border};
+`;
+
+const CommitsContainer = styled.div`
+  padding: 10px;
+  border-radius: 6px;
+  border-style: dashed;
+  border-color: ${state.theme.border};
+  flex-direction: row;
+  text-align: center;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+const Commit = styled.div`
+  width: 100%;
+  display: flex;
+  padding: 15px;
+  flex-direction: row;
+  text-align: start;
+  align-items: center;
+  justify-content: space-between;
   gap: 25px;
 `;
 
@@ -34,6 +85,25 @@ const SearchStack = styled.div`
     flex-direction: column;
     gap: 30px;
   }
+`;
+
+const Text = styled.div`
+  font-size: ${state.theme.text.fontSize};
+  font-weight: ${state.theme.text.fontWeight};
+  color: ${state.theme.color};
+`;
+
+const MHeading = styled.div`
+  font-size: ${state.theme.heading.fontSize};
+  font-weight: ${state.theme.heading.fontWeight};
+  color: ${state.theme.color};
+  width: 250px;
+`;
+
+const Heading = styled.div`
+  font-size: ${state.theme.heading.fontSize};
+  font-weight: ${state.theme.heading.fontWeight};
+  color: ${state.theme.color};
 `;
 
 const Select = styled.select`
@@ -53,6 +123,18 @@ const Select = styled.select`
   }
 `;
 
+const clearState = () => {
+  State.update({
+    loading: false,
+    error: false,
+    user: null,
+    repo: null,
+    branches: null,
+    selectedBranch: null,
+    selectedPage: 1,
+  });
+};
+
 const handleSubmit = (value) => {
   State.update({ loading: true });
   const repoUrl = value.toLocaleLowerCase();
@@ -63,7 +145,8 @@ const handleSubmit = (value) => {
   })
     .then((res) => {
       if (res.status !== 200) {
-        State.update({ user: null, repo: null, error: true });
+        clearState();
+        State.update({ error: true });
       } else {
         State.update({
           user: {
@@ -88,7 +171,8 @@ const getBranches = async () => {
   )
     .then((res) => {
       if (res.status !== 200) {
-        State.update({ user: null, repo: null, error: true });
+        clearState();
+        State.update({ error: true });
       } else {
         State.update({
           branches: res.body,
@@ -105,10 +189,55 @@ const getBranches = async () => {
 };
 
 if (state.user && state.repo) getBranches();
-console.log(state.selectedBranch);
+
+const getCommits = () => {
+  asyncFetch(
+    `https://api.github.com/repos/${state.user?.name}/${state.repo?.name}/commits?per_page=10&page=${state.selectedPage}&sha=${state.selectedBranch}`,
+    {
+      method: "GET",
+    }
+  )
+    .then((res) => {
+      if (res.status !== 200) {
+        clearState();
+        State.update({ error: true });
+      } else {
+        State.update({
+          commits: res.body.map((item) => {
+            const commit = item.commit;
+            return {
+              sha: item.sha,
+              message: commit.message,
+              date: new Date(commit.author.date),
+              author: commit.author.name,
+              url: item.html_url.replace("commit", "tree"),
+            };
+          }),
+        });
+      }
+    })
+    .finally(() => {
+      State.update({ loading: false });
+    });
+};
+
+if (state.branches && state.selectedBranch) getCommits();
+
+const truncateStringInMiddle = (str, maxLength) => {
+  if (str.length <= maxLength) {
+    return str;
+  }
+
+  const halfMaxLength = Math.floor(maxLength / 2);
+  const firstHalf = str.slice(0, halfMaxLength);
+  const secondHalf = str.slice(-halfMaxLength);
+
+  return firstHalf + "..." + secondHalf;
+};
+
 return (
   <Stack>
-    Importing from GitHub
+    <Text>Importing from GitHub</Text>
     <SearchStack>
       <Widget
         src={`${state.ownerId}/widget/SourceScan.Inputs.SearchBar`}
@@ -142,6 +271,21 @@ return (
               </option>
             ))}
           </Select>
+        ) : null}
+        {state.commits ? (
+          <CommitsContainer>
+            {state.commits.map((commit, i) => (
+              <HStack key={i}>
+                <Text>{commit.date.toLocaleDateString()}</Text>
+                <Commit>
+                  <MHeading>"{commit.message}"</MHeading>
+                  <Text>{" by "}</Text>
+                  <Text>{commit.author}</Text>
+                  <Heading>({truncateStringInMiddle(commit.sha, 12)})</Heading>
+                </Commit>
+              </HStack>
+            ))}
+          </CommitsContainer>
         ) : null}
       </Stack>
     ) : state.loading && !state.error ? (
