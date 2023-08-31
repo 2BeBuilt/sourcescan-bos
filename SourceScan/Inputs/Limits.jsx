@@ -3,29 +3,23 @@ State.init({
   label: props.label || "Contracts per page",
   selectedLimit: props.selectedLimit || props.limits[0] || 10,
   limits: props.limits || [10, 20, 50],
-  theme: props.theme || "light",
+  theme: props.theme || {
+    name: "light",
+    bg: "#e3e8ef",
+    color: "#4c5566",
+    border: "#748094",
+    button: {
+      bg: "#eef2f6",
+    },
+    hover: {
+      bg: "#eef2f6",
+      border: "#d8dfe7",
+    },
+  },
 });
 
-const dark = {
-  bg: "#28282b",
-  color: "#e6eaee",
-  border: "#748094",
-  hoverBorder: "#4e5460",
-};
-
-const light = {
-  bg: "#e3e8ef",
-  color: "#4c5566",
-  border: "#748094",
-  hoverBorder: "#d8dfe7",
-};
-
-const useTheme = (light, dark) => {
-  return state.theme === "light" ? light : dark;
-};
-
 const Select = styled.select`
-  border: 1px solid ${useTheme(light.border, dark.border)};
+  border: 1px solid ${state.theme.border};
   background-color: transparent;
   border-radius: 6px;
   height: 36px;
@@ -34,10 +28,10 @@ const Select = styled.select`
   padding-right: 10px;
   text-align: start;
   transition: border 0.1s ease-in-out;
-  color: ${useTheme(light.color, dark.color)};
+  color: ${state.theme.color};
 
   :hover {
-    border: 1px solid ${useTheme(light.hoverBorder, dark.hoverBorder)};
+    border: 1px solid ${state.theme.hover.border};
   }
 `;
 

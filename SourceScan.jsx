@@ -208,7 +208,7 @@ const pages = {
           src={`${state.config.ownerId}/widget/SourceScan.Inputs.Limits`}
           props={{
             handleOptionsChange: handleOptionsChange,
-            theme: state.theme,
+            theme: useTheme(light, dark),
             limits: limits,
             selectedLimit: state.limit,
           }}
