@@ -1,4 +1,10 @@
-if (!props.user) return "Please provide github user to the component";
+if (!props.user)
+  return (
+    <Widget
+      src={`${state.ownerId}/widget/SourceScan.Common.ErrorAlert`}
+      props={{ message: "Please provide github user to the component" }}
+    />
+  );
 
 State.init({
   user: null,

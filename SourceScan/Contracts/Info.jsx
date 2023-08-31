@@ -42,7 +42,12 @@ const getContract = async () => {
 };
 
 if (!props.contractId) {
-  return "Please provide a contractId to the component";
+  return (
+    <Widget
+      src={`${state.ownerId}/widget/SourceScan.Common.ErrorAlert`}
+      props={{ message: "Please provide a contractId to component" }}
+    />
+  );
 } else {
   getContract();
 }
