@@ -53,6 +53,7 @@ const HStack = styled.div`
 `;
 
 const CommitsContainer = styled.div`
+  height: 100%;
   padding: 10px;
   border-radius: 6px;
   border-style: dashed;
@@ -162,7 +163,7 @@ const handleSubmit = (value) => {
     });
 };
 
-const getBranches = async () => {
+const getBranches = async (user, repo) => {
   asyncFetch(
     `https://api.github.com/repos/${state.user.name}/${state.repo.name}/branches`,
     {
@@ -188,7 +189,8 @@ const getBranches = async () => {
     });
 };
 
-if (state.user && state.repo) getBranches();
+if (state.user && state.repo && !state.branches && !state.selectedBranch)
+  getBranches();
 
 const getCommits = () => {
   asyncFetch(
@@ -222,6 +224,12 @@ const getCommits = () => {
 };
 
 if (state.branches && state.selectedBranch) getCommits();
+
+const handleSelectChange = (e) => {
+  State.update({
+    selectedBranch: e.target.value,
+  });
+};
 
 const truncateStringInMiddle = (str, maxLength) => {
   if (str.length <= maxLength) {
@@ -260,11 +268,11 @@ return (
           }}
         />
         {state.branches ? (
-          <Select>
+          <Select onChange={(e) => handleSelectChange(e)}>
             {state.branches.map((branch, i) => (
               <option
                 key={i}
-                value={branch}
+                value={branch.name}
                 selected={branch.name === state.selectedBranch}
               >
                 {branch.name}
