@@ -43,15 +43,31 @@ State.init({
 });
 
 const dark = {
+  name: "dark",
   bg: "#28282b",
   color: "#e6eaee",
   border: "#748094",
+  button: {
+    bg: "#39393c",
+  },
+  hover: {
+    bg: "#4b4b4b",
+    border: "#4e5460",
+  },
 };
 
 const light = {
+  name: "light",
   bg: "#e3e8ef",
   color: "#4c5566",
   border: "#748094",
+  button: {
+    bg: "#eef2f6",
+  },
+  hover: {
+    bg: "#eef2f6",
+    border: "#d8dfe7",
+  },
 };
 
 const useTheme = (light, dark) => {
@@ -183,7 +199,7 @@ const pages = {
           src={`${state.config.ownerId}/widget/SourceScan.Inputs.SearchBar`}
           props={{
             placeholder: "Account ID",
-            theme: state.theme,
+            theme: useTheme(light, dark),
             handleSubmit: handleSubmit,
             value: state.search,
           }}
@@ -257,7 +273,32 @@ const pages = {
   upload: (
     <Widget
       src={`${state.config.ownerId}/widget/SourceScan.Upload.Github`}
-      props={{ theme: state.theme }}
+      props={{
+        theme: useTheme(
+          {
+            bg: light.bg,
+            color: light.color,
+            text: {
+              fontSize: "16px",
+            },
+            heading: {
+              fontSize: "18px",
+              fontWeight: "600",
+            },
+          },
+          {
+            bg: dark.bg,
+            color: dark.color,
+            text: {
+              fontSize: "16px",
+            },
+            heading: {
+              fontSize: "18px",
+              fontWeight: "600",
+            },
+          }
+        ),
+      }}
     />
   ),
 };
@@ -268,7 +309,7 @@ return (
       <Widget
         src={`${state.config.ownerId}/widget/SourceScan.Layout.Navbar`}
         props={{
-          theme: state.theme,
+          theme: useTheme(light, dark),
           switchTheme: switchTheme,
         }}
       />

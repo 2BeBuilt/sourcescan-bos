@@ -14,7 +14,7 @@ State.init({
 });
 
 if (!props.github)
-  return "Please provide github: {owner: string, repo: string, sha: string} to the component";
+  return "Please provide github: {owner: string, repo: string, sha(optional): string} to the component";
 
 const RStack = styled.div`
   display: flex;
@@ -92,21 +92,29 @@ return (
       />
     </Mobile>
     <Heading>{props.github.repo}</Heading>
-    <Desktop>
-      <Widget
-        src={`${state.ownerId}/widget/SourceScan.Common.Icons.ChevronRightIcon`}
-        props={{ width: "20px", height: "20px" }}
-      />
-    </Desktop>
-    <Mobile>
-      <Widget
-        src={`${state.ownerId}/widget/SourceScan.Common.Icons.ChevronDownIcon`}
-        props={{ width: "20px", height: "20px" }}
-      />
-    </Mobile>
-    <Heading>{truncateStringInMiddle(props.github.sha, 12)}</Heading>
+    {props.github.sha ? (
+      <>
+        <Desktop>
+          <Widget
+            src={`${state.ownerId}/widget/SourceScan.Common.Icons.ChevronRightIcon`}
+            props={{ width: "20px", height: "20px" }}
+          />
+        </Desktop>
+        <Mobile>
+          <Widget
+            src={`${state.ownerId}/widget/SourceScan.Common.Icons.ChevronDownIcon`}
+            props={{ width: "20px", height: "20px" }}
+          />
+        </Mobile>
+        <Heading>{truncateStringInMiddle(props.github.sha, 12)}</Heading>
+      </>
+    ) : null}
     <A
-      href={`https://github.com/${props.github.owner}/${props.github.repo}/tree/${props.github.sha}`}
+      href={
+        props.github.sha
+          ? `https://github.com/${props.github.owner}/${props.github.repo}/tree/${props.github.sha}`
+          : `https://github.com/${props.github.owner}/${props.github.repo}`
+      }
       target={"_blank"}
     >
       <Widget

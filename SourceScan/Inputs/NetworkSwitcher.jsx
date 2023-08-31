@@ -1,32 +1,25 @@
 const networks = ["mainnet", "testnet"];
 
 State.init({
-  theme: props.theme || "light",
+  theme: props.theme || {
+    name: "light",
+    bg: "#e3e8ef",
+    color: "#4c5566",
+    border: "#748094",
+    button: {
+      bg: "#eef2f6",
+    },
+    hover: {
+      bg: "#eef2f6",
+    },
+  },
 });
-
-const dark = {
-  bg: "#28282b",
-  color: "#e6eaee",
-  border: "#748094",
-  hoverBg: "#4b4b4b",
-};
-
-const light = {
-  bg: "#e3e8ef",
-  color: "#4c5566",
-  border: "#748094",
-  hoverBg: "#eef2f6",
-};
-
-const useTheme = (light, dark) => {
-  return state.theme === "light" ? light : dark;
-};
 
 const Select = styled.select`
   font-weight: 600;
   cursor: pointer;
-  border: 1px dashed ${useTheme(light.border, dark.border)};
-  background-color: ${useTheme(light.bg, dark.bg)};
+  border: 1px dashed ${state.theme.border};
+  background-color: ${state.theme.bg};
   border-radius: 8px;
   width: 122px;
   height: 40px;
@@ -34,11 +27,11 @@ const Select = styled.select`
   align-items: center;
   justify-content: center;
   text-align: center;
-  color: ${useTheme(light.color, dark.color)};
+  color: ${state.theme.color};
   transition: background-color 0.1s ease-in-out;
 
   :hover {
-    background-color: ${useTheme(light.hoverBg, dark.hoverBg)};
+    background-color: ${state.theme.hover.bg};
   }
 `;
 
@@ -52,8 +45,8 @@ const DropDown = styled.div`
   .dropbtn {
     font-weight: 600;
     cursor: pointer;
-    border: 1px dashed ${useTheme(light.border, dark.border)};
-    background-color: ${useTheme(light.bg, dark.bg)};
+    border: 1px dashed ${state.theme.border};
+    background-color: ${state.theme.bg};
     border-radius: 8px;
     width: 122px;
     height: 40px;
@@ -61,11 +54,11 @@ const DropDown = styled.div`
     align-items: center;
     justify-content: center;
     text-align: center;
-    color: ${useTheme(light.color, dark.color)};
+    color: ${state.theme.color};
     transition: background-color 0.1s ease-in-out;
 
     :hover {
-      background-color: ${useTheme(light.hoverBg, dark.hoverBg)};
+      background-color: ${state.theme.hover.bg};
     }
   }
 
@@ -80,8 +73,8 @@ const DropDown = styled.div`
     justify-content: center;
     text-align: center;
     position: absolute;
-    border: 1px dashed ${useTheme(light.border, dark.border)};
-    background-color: ${useTheme(light.bg, dark.bg)};
+    border: 1px dashed ${state.theme.border};
+    background-color: ${state.theme.bg};
     border-radius: 8px;
     width: 122px;
     height: 40px;
@@ -97,14 +90,14 @@ const DropDown = styled.div`
     padding: 6px;
     height: 100%;
     font-weight: 600;
-    color: ${useTheme(light.color, dark.color)};
+    color: ${state.theme.color};
     cursor: pointer;
     border-radius: 8px;
     text-decoration: none;
   }
 
   .dropdown-content a:hover {
-    background-color: ${useTheme(light.hoverBg, dark.hoverBg)};
+    background-color: ${state.theme.hover.bg};
   }
 
   .dropdown:hover .dropdown-content {
@@ -112,7 +105,7 @@ const DropDown = styled.div`
   }
 
   .dropdown:hover .dropbtn {
-    background-color: ${useTheme(light.hoverBg, dark.hoverBg)};
+    background-color: ${state.theme.hover.bg};
   }
 `;
 

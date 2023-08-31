@@ -5,6 +5,7 @@ const useNetwork = (mainnet, testnet) => {
 State.init({
   ownerId: useNetwork("sourcescan.near", "sourcescan.testnet"),
   theme: props.theme || light,
+  loading: false,
   user: null,
   repo: null,
 });
@@ -33,6 +34,7 @@ const SearchStack = styled.div`
 `;
 
 const handleSubmit = (value) => {
+  State.update({ loading: true });
   const repoUrl = value.toLocaleLowerCase();
   const parsed = repoUrl?.replace("https://github.com/", "").split("/");
 
@@ -51,9 +53,11 @@ const handleSubmit = (value) => {
     .catch((err) => {
       console.log(err);
     })
-    .finally(() => {});
+    .finally(() => {
+      State.update({ loading: false });
+    });
 };
-console.log(state);
+
 return (
   <Stack>
     Importing from GitHub
@@ -69,5 +73,21 @@ return (
         }}
       />
     </SearchStack>
+    {!loading && state.repo && state.user ? (
+      <Stack>
+        <Widget
+          src={`${state.ownerId}/widget/SourceScan.Common.Github.GithubLink`}
+          props={{
+            github: { owner: state.user?.name, repo: state.repo?.name },
+            theme: { color: state.theme.color, heading: state.theme.heading },
+          }}
+        />
+      </Stack>
+    ) : loading ? (
+      <Widget
+        src={`${state.ownerId}/widget/SourceScan.Common.Spinner`}
+        props={{ width: "64px", height: "64px" }}
+      />
+    ) : null}
   </Stack>
 );

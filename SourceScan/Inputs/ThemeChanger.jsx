@@ -1,27 +1,17 @@
 State.init({
-  theme: props.theme || "light",
+  theme: props.theme || {
+    name: "light",
+    bg: "#e3e8ef",
+    color: "#4c5566",
+    border: "#748094",
+    button: {
+      bg: "#eef2f6",
+    },
+  },
 });
 
-const dark = {
-  bg: "#28282b",
-  color: "#e6eaee",
-  border: "#748094",
-  button: {
-    bg: "#39393c",
-  },
-};
-
-const light = {
-  bg: "#e3e8ef",
-  color: "#4c5566",
-  border: "#748094",
-  button: {
-    bg: "#eef2f6",
-  },
-};
-
 const useTheme = (light, dark) => {
-  return state.theme === "light" ? light : dark;
+  return state.theme.name === "light" ? light : dark;
 };
 
 const Button = styled.button`
@@ -32,11 +22,11 @@ const Button = styled.button`
   align-items: center;
   justify-content: center;
   border: 1px solid transparent;
-  background-color: ${useTheme(light.bg, dark.bg)};
+  background-color: ${state.theme.bg};
   transition: background-color 0.1s ease-in-out;
 
   :hover {
-    background-color: ${useTheme(light.button.bg, dark.button.bg)};
+    background-color: ${state.theme.button.bg};
   }
 `;
 
@@ -50,7 +40,7 @@ const Moon = (width, height) => {
     <SVG
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 20 20"
-      fill={`${useTheme(light.color, dark.color)}`}
+      fill={`${state.theme.color}`}
     >
       <path
         fillRule="evenodd"
@@ -73,7 +63,7 @@ const Sun = (width, height) => {
       fill="none"
       viewBox="0 0 24 24"
       strokeWidth="1.5"
-      stroke={`${useTheme(light.color, dark.color)}`}
+      stroke={`${state.theme.color}`}
     >
       <path
         strokeLinecap="round"
