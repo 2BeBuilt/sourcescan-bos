@@ -50,7 +50,7 @@ const SearchButton = styled.button`
   border-radius: 6px;
   padding-top: 5px;
   padding-bottom: 5px;
-  border: 1px solid transparent;
+  border: 1px solid ${state.theme.border};
   color: ${state.theme.color};
   background-color: ${state.theme.bg};
   transition: background-color 0.1s ease-in-out;
