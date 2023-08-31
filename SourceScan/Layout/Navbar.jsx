@@ -15,7 +15,7 @@ const useNetwork = (mainnet, testnet) => {
   return context.networkId === "mainnet" ? mainnet : testnet;
 };
 
-const useTheme = (light, dark) => {
+const useThemeName = (light, dark) => {
   return state.theme.name === "light" ? light : dark;
 };
 
@@ -118,7 +118,7 @@ const Desktop = styled.div`
 
 const Logo = styled.img`
   cursor: pointer;
-  filter: ${useTheme("invert(0)", "invert(1)")};
+  filter: ${useThemeName("invert(0)", "invert(1)")};
 `;
 
 return (

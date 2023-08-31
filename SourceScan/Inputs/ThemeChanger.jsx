@@ -10,7 +10,7 @@ State.init({
   },
 });
 
-const useTheme = (light, dark) => {
+const useThemeName = (light, dark) => {
   return state.theme.name === "light" ? light : dark;
 };
 
@@ -77,7 +77,7 @@ const Sun = (width, height) => {
 return (
   <>
     <Button onClick={props.switchTheme}>
-      {useTheme(
+      {useThemeName(
         <Moon width={"20px"} height={"20px"} />,
         <Sun width={"25px"} height={"25px"} />
       )}
