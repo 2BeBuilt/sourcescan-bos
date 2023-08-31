@@ -254,6 +254,8 @@ if (state.contract) {
   txCheck();
 }
 
+console.log(state.theme);
+
 return (
   <Center>
     {!state.contract ? (

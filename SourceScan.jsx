@@ -51,6 +51,13 @@ const dark = {
     bg: "#39393c",
     border: "#4e5460",
   },
+  text: {
+    fontSize: "16px",
+  },
+  heading: {
+    fontSize: "18px",
+    fontWeight: "600",
+  },
 };
 
 const light = {
@@ -61,6 +68,13 @@ const light = {
   hover: {
     bg: "#eef2f6",
     border: "#d8dfe7",
+  },
+  text: {
+    fontSize: "16px",
+  },
+  heading: {
+    fontSize: "18px",
+    fontWeight: "600",
   },
 };
 
@@ -235,30 +249,16 @@ const pages = {
         contractId: props.contractId,
         theme: useTheme(
           {
-            bg: light.bg,
-            color: light.color,
+            ...light,
             border: `1px dashed ${light.border}`,
-            text: {
-              fontSize: "16px",
-            },
             heading: {
-              fontSize: "18px",
-              fontWeight: "600",
+              ...light.heading,
               underline: true,
             },
           },
           {
-            bg: dark.bg,
-            color: dark.color,
+            ...dark,
             border: `1px dashed ${dark.border}`,
-            text: {
-              fontSize: "16px",
-            },
-            heading: {
-              fontSize: "18px",
-              fontWeight: "600",
-              underline: true,
-            },
           }
         ),
       }}
@@ -268,30 +268,7 @@ const pages = {
     <Widget
       src={`${state.config.ownerId}/widget/SourceScan.Upload.Github`}
       props={{
-        theme: useTheme(
-          {
-            bg: light.bg,
-            color: light.color,
-            text: {
-              fontSize: "16px",
-            },
-            heading: {
-              fontSize: "18px",
-              fontWeight: "600",
-            },
-          },
-          {
-            bg: dark.bg,
-            color: dark.color,
-            text: {
-              fontSize: "16px",
-            },
-            heading: {
-              fontSize: "18px",
-              fontWeight: "600",
-            },
-          }
-        ),
+        theme: useTheme(light, dark),
       }}
     />
   ),
