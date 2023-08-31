@@ -9,6 +9,8 @@ State.init({
   error: false,
   user: null,
   repo: null,
+  branches: null,
+  selectedBranch: null,
 });
 
 const Stack = styled.div`
@@ -31,6 +33,23 @@ const SearchStack = styled.div`
   @media only screen and (max-width: 750px) {
     flex-direction: column;
     gap: 30px;
+  }
+`;
+
+const Select = styled.select`
+  border: 1px solid ${state.theme.border};
+  background-color: transparent;
+  border-radius: 6px;
+  height: 36px;
+  width: 200px;
+  padding-left: 10px;
+  padding-right: 10px;
+  text-align: start;
+  transition: border 0.1s ease-in-out;
+  color: ${state.theme.color};
+
+  :hover {
+    border: 1px solid ${state.theme.hover.border};
   }
 `;
 
@@ -60,8 +79,33 @@ const handleSubmit = (value) => {
     });
 };
 
-console.log(state.error);
+const getBranches = async () => {
+  asyncFetch(
+    `https://api.github.com/repos/${state.user.name}/${state.repo.name}/branches`,
+    {
+      method: "GET",
+    }
+  )
+    .then((res) => {
+      if (res.status !== 200) {
+        State.update({ user: null, repo: null, error: true });
+      } else {
+        State.update({
+          branches: res.body,
+          selectedBranch:
+            res.body.find(
+              (branch) => branch.name === "main" || branch.name === "master"
+            )?.name || res.body[0].name,
+        });
+      }
+    })
+    .finally(() => {
+      State.update({ loading: false });
+    });
+};
 
+if (state.user && state.repo) getBranches();
+console.log(state.selectedBranch);
 return (
   <Stack>
     Importing from GitHub
@@ -86,6 +130,19 @@ return (
             theme: { color: state.theme.color, heading: state.theme.heading },
           }}
         />
+        {state.branches ? (
+          <Select>
+            {state.branches.map((branch, i) => (
+              <option
+                key={i}
+                value={branch}
+                selected={branch.name === state.selectedBranch}
+              >
+                {branch.name}
+              </option>
+            ))}
+          </Select>
+        ) : null}
       </Stack>
     ) : state.loading && !state.error ? (
       <Widget
