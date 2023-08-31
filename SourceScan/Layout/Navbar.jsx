@@ -1,8 +1,8 @@
 const pages = [
   {
     label: "SourceScan",
-    href: props.app || "https://sourcescan.2bb.dev",
-    target: "_blank",
+    href: `#/${state.ownerId}/widget/SourceScan?page=upload`,
+    target: "_self",
   },
   {
     label: "Contracts",

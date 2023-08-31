@@ -182,6 +182,7 @@ const pages = {
         <Widget
           src={`${state.config.ownerId}/widget/SourceScan.Inputs.SearchBar`}
           props={{
+            placeholder: "Account ID",
             theme: state.theme,
             handleSubmit: handleSubmit,
             value: state.search,
@@ -218,42 +219,46 @@ const pages = {
     </>
   ),
   contract: (
-    <>
-      <Widget
-        src={`${state.config.ownerId}/widget/SourceScan.Contracts.Info`}
-        props={{
-          contractId: props.contractId,
-          theme: useTheme(
-            {
-              bg: light.bg,
-              color: light.color,
-              border: `1px dashed ${light.border}`,
-              text: {
-                fontSize: "16px",
-              },
-              heading: {
-                fontSize: "18px",
-                fontWeight: "600",
-                underline: true,
-              },
+    <Widget
+      src={`${state.config.ownerId}/widget/SourceScan.Contracts.Info`}
+      props={{
+        contractId: props.contractId,
+        theme: useTheme(
+          {
+            bg: light.bg,
+            color: light.color,
+            border: `1px dashed ${light.border}`,
+            text: {
+              fontSize: "16px",
             },
-            {
-              bg: dark.bg,
-              color: dark.color,
-              border: `1px dashed ${dark.border}`,
-              text: {
-                fontSize: "16px",
-              },
-              heading: {
-                fontSize: "18px",
-                fontWeight: "600",
-                underline: true,
-              },
-            }
-          ),
-        }}
-      />
-    </>
+            heading: {
+              fontSize: "18px",
+              fontWeight: "600",
+              underline: true,
+            },
+          },
+          {
+            bg: dark.bg,
+            color: dark.color,
+            border: `1px dashed ${dark.border}`,
+            text: {
+              fontSize: "16px",
+            },
+            heading: {
+              fontSize: "18px",
+              fontWeight: "600",
+              underline: true,
+            },
+          }
+        ),
+      }}
+    />
+  ),
+  upload: (
+    <Widget
+      src={`${state.config.ownerId}/widget/SourceScan.Upload.Github`}
+      props={{ theme: state.theme }}
+    />
   ),
 };
 
@@ -263,7 +268,6 @@ return (
       <Widget
         src={`${state.config.ownerId}/widget/SourceScan.Layout.Navbar`}
         props={{
-          app: state.config.app,
           theme: state.theme,
           switchTheme: switchTheme,
         }}

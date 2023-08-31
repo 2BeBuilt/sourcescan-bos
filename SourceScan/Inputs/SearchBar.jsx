@@ -41,7 +41,7 @@ const HStack = styled.div`
 
 const SearchInput = styled.input`
   height: 36px;
-  width: 126px;
+  width: ${props.inputWidth || "126px"};
   border-radius: 6px;
   padding-left: 10px;
   padding-right: 10px;
@@ -77,7 +77,7 @@ const SearchButton = styled.button`
 return (
   <HStack>
     <SearchInput
-      placeholder={"Account ID"}
+      placeholder={props.placeholder || "Search"}
       value={state.value}
       onChange={handleChange}
       autoFocus
