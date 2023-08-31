@@ -6,6 +6,7 @@ State.init({
   ownerId: useNetwork("sourcescan.near", "sourcescan.testnet"),
   theme: props.theme || light,
   loading: false,
+  error: false,
   user: null,
   repo: null,
 });
@@ -42,21 +43,24 @@ const handleSubmit = (value) => {
     method: "GET",
   })
     .then((res) => {
-      State.update({
-        user: {
-          name: res.body.owner.login,
-          avatar: res.body.owner.avatar_url,
-        },
-      });
-      State.update({ repo: { name: res.body.name, url: res.body.html_url } });
-    })
-    .catch((err) => {
-      console.log(err);
+      if (res.status !== 200) {
+        State.update({ error: true });
+      } else {
+        State.update({
+          user: {
+            name: res.body.owner.login,
+            avatar: res.body.owner.avatar_url,
+          },
+        });
+        State.update({ repo: { name: res.body.name, url: res.body.html_url } });
+      }
     })
     .finally(() => {
       State.update({ loading: false });
     });
 };
+
+console.log(state.error);
 
 return (
   <Stack>
@@ -73,7 +77,7 @@ return (
         }}
       />
     </SearchStack>
-    {!loading && state.repo && state.user ? (
+    {!state.loading && state.repo && state.user ? (
       <Stack>
         <Widget
           src={`${state.ownerId}/widget/SourceScan.Common.Github.GithubLink`}
@@ -83,10 +87,15 @@ return (
           }}
         />
       </Stack>
-    ) : loading ? (
+    ) : state.loading && !state.error ? (
       <Widget
         src={`${state.ownerId}/widget/SourceScan.Common.Spinner`}
         props={{ width: "64px", height: "64px" }}
+      />
+    ) : state.error ? (
+      <Widget
+        src={`${state.ownerId}/widget/SourceScan.Common.ErrorAlert`}
+        props={{ message: "Invalid repository URL" }}
       />
     ) : null}
   </Stack>

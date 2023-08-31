@@ -26,7 +26,6 @@ const Text = styled.div`
 return (
   <ErrorAlert>
     <Stack>
-      <Heading>⚠ {props.title}</Heading>
       <Text>{props.message}</Text>
     </Stack>
   </ErrorAlert>
