@@ -9,11 +9,8 @@ const useThemeName = (light, dark) => {
 const pages = [
   {
     label: "SourceScan",
-    href: useNetwork(
-      "https://sourcescan.2bb.dev",
-      "https://sourcescan.testnet.2bb.dev"
-    ),
-    target: "_blank",
+    href: `#/${state.ownerId}/widget/SourceScan?page=upload`,
+    target: "_self",
   },
   {
     label: "Contracts",
