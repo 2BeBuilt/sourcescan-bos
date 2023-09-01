@@ -14,7 +14,15 @@ State.init({
 });
 
 if (!props.github)
-  return "Please provide github: {owner: string, repo: string, sha(optional): string} to the component";
+  return (
+    <Widget
+      src={`${state.ownerId}/widget/SourceScan.Common.ErrorAlert`}
+      props={{
+        message:
+          "Please provide github: {owner: string, repo: string, sha(optional): string} to the component",
+      }}
+    />
+  );
 
 const RStack = styled.div`
   display: flex;
