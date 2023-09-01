@@ -269,6 +269,7 @@ const pages = {
       src={`${state.config.ownerId}/widget/SourceScan.Upload.Github`}
       props={{
         theme: useTheme(light, dark),
+        apiHost: state.config.apiHost,
       }}
     />
   ),

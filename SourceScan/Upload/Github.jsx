@@ -4,6 +4,7 @@ const useNetwork = (mainnet, testnet) => {
 
 State.init({
   ownerId: useNetwork("sourcescan.near", "sourcescan.testnet"),
+  apiHost: props.apiHost || "https://sourcsecan.2bb.dev",
   theme: props.theme || {
     name: "light",
     bg: "#e3e8ef",
@@ -51,6 +52,20 @@ const HStack = styled.div`
   gap: 25px;
 `;
 
+const ImportStack = styled.div`
+  display: flex;
+  flex-direction: row;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  gap: 25px;
+
+  @media only screen and (max-width: 750px) {
+    flex-direction: column;
+    gap: 30px;
+  }
+`;
+
 const Commit = styled.div`
   width: 100%;
   display: flex;
@@ -60,6 +75,12 @@ const Commit = styled.div`
   justify-content: space-between;
   gap: 25px;
   border-bottom: 1px dashed ${state.theme.border};
+
+  @media only screen and (max-width: 750px) {
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 25px;
+  }
 `;
 
 const CommitsContainer = styled.div`
@@ -83,6 +104,12 @@ const CommitInfo = styled.div`
   align-items: center;
   justify-content: space-between;
   gap: 25px;
+
+  @media only screen and (max-width: 750px) {
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+  }
 `;
 
 const SearchStack = styled.div`
@@ -280,7 +307,41 @@ const handleCommitSelect = (commit) => {
   });
 };
 
-const handleImport = () => {};
+const handleImport = () => {
+  if (!state.selectedCommit) return;
+
+  asyncFetch(`${state.apiHost}/api/temp/github`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "POST",
+    body: JSON.stringify({
+      repo: state.repo?.url,
+      sha: state.selectedCommit?.sha,
+    }),
+  })
+    .then((res) => {
+      if (res.status !== 200) {
+        clearState();
+        State.update({ error: true });
+      } else {
+        console.log(
+          res.body.key,
+          res.body.files,
+          state.repo?.name && state.user?.name && state.selectedCommit?.sha
+            ? {
+                repo: state.repo?.name,
+                owner: state.user?.name,
+                sha: state.selectedCommit?.sha,
+              }
+            : null
+        );
+      }
+    })
+    .finally(() => {
+      State.update({ loading: false });
+    });
+};
 
 const truncateStringInMiddle = (str, maxLength) => {
   if (str.length <= maxLength) {
@@ -311,7 +372,7 @@ return (
     </SearchStack>
     {!state.loading && state.repo && state.user ? (
       <Stack>
-        <HStack>
+        <ImportStack>
           <Widget
             src={`${state.ownerId}/widget/SourceScan.Common.Github.GithubLink`}
             props={{
@@ -326,7 +387,7 @@ return (
           {state.selectedCommit ? (
             <Button onClick={handleImport}>Import</Button>
           ) : null}
-        </HStack>
+        </ImportStack>
         {state.branches ? (
           <Select onChange={(e) => handleSelectChange(e)}>
             {state.branches.map((branch, i) => (
