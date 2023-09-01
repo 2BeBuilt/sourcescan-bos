@@ -147,6 +147,7 @@ const Heading = styled.div`
 `;
 
 const Select = styled.select`
+  cursor: pointer;
   border: 1px solid ${state.theme.border};
   background-color: transparent;
   border-radius: 6px;
@@ -448,7 +449,12 @@ return (
     ) : (
       <Widget
         src={`${state.ownerId}/widget/SourceScan.Upload.Compile`}
-        props={{ key: state.key, files: state.files, theme: state.theme }}
+        props={{
+          key: state.key,
+          files: state.files,
+          theme: state.theme,
+          apiHost: state.apiHost,
+        }}
       />
     )}
   </Stack>
