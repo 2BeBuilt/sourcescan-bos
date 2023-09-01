@@ -452,6 +452,11 @@ return (
         props={{
           key: state.key,
           files: state.files,
+          github: {
+            repo: state.repo.name,
+            owner: state.user.name,
+            sha: state.selectedCommit?.sha,
+          },
           theme: state.theme,
           apiHost: state.apiHost,
         }}

@@ -26,18 +26,35 @@ State.init({
       fontWeight: "600",
     },
   },
+  github: props.github,
   key: props.key,
   files: props.files,
   entryPoint: null,
   lang: "rust",
-  compiling: false,
+  loading: false,
   error: false,
-  compiled: false,
-  cid: null,
   gatewayKey: null,
 });
 
-if (!props.key) {
+const clearState = () => {
+  State.update({
+    entryPoint: null,
+    lang: "rust",
+    loading: false,
+    error: false,
+    gatewayKey: null,
+  });
+};
+
+if (!props.github) {
+  <Widget
+    src={`${state.ownerId}/widget/SourceScan.Common.ErrorAlert`}
+    props={{
+      message:
+        "Please provide github: {repo: string, owner: string, sha: string} to the component",
+    }}
+  />;
+} else if (!props.key) {
   <Widget
     src={`${state.ownerId}/widget/SourceScan.Common.ErrorAlert`}
     props={{
@@ -129,15 +146,11 @@ const Stack = styled.div`
 const DeployStack = styled.div`
   width: 100%;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   text-align: center;
   align-items: center;
   justify-content: center;
   gap: 25px;
-
-  @media only screen and (max-width: 750px) {
-    flex-direction: column;
-  }
 `;
 
 const HStack = styled.div`
@@ -169,7 +182,6 @@ const Select = styled.select`
 
 const Button = styled.button`
   height: 36px;
-  width: 96px;
   font-weight: 600;
   border-radius: 6px;
   padding: 5px;
@@ -194,7 +206,7 @@ const A = styled.a`
 `;
 
 const handleEntryPointSelect = (file) => {
-  if (state.compiling || state.compiled || state.error) return;
+  if (state.loading || state.gatewayKey || state.error) return;
 
   if (state.entryPoint === file) {
     State.update({
@@ -207,79 +219,44 @@ const handleEntryPointSelect = (file) => {
 };
 
 const handleLangChange = (e) => {
-  if (state.compiling || state.compiled || state.error) return;
+  if (state.loading || state.gatewayKey || state.error) return;
 
   State.update({ lang: e.target.value });
 };
 
-const handleCompile = () => {
-  if (state.compiling) return;
+const handleKeyGen = () => {
+  if (state.loading || state.gatewayKey || state.error) return;
 
   State.update({
-    compiling: true,
+    loading: true,
   });
 
-  asyncFetch(`${state.apiHost}/api/${state.lang}/compile`, {
+  asyncFetch(`${state.apiHost}/api/gateway/genKey`, {
     headers: {
       "Content-Type": "application/json",
     },
     method: "POST",
     body: JSON.stringify({
       key: state.key,
+      lang: state.lang,
       entry_point: state.entryPoint,
+      github: state.github,
+      account_id: context.accountId,
     }),
-  }).then((res) => {
-    if (res.status !== 200) {
-      clearState();
-      State.update({ error: true });
-    } else {
-      asyncFetch(`${state.apiHost}/api/ipfs/upload`, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        method: "POST",
-        body: JSON.stringify({
-          key: state.key,
-        }),
-      }).then((res) => {
-        if (res.status !== 200) {
-          clearState();
-          State.update({ error: true });
-        } else {
-          State.update({
-            cid: res.body.cid,
-          });
-
-          asyncFetch(`${state.apiHost}/api/gateway/genKey`, {
-            headers: {
-              "Content-Type": "application/json",
-            },
-            method: "POST",
-            body: JSON.stringify({
-              key: state.key,
-              cid: res.body.cid,
-              lang: state.lang,
-              accountId: context.accountId,
-            }),
-          })
-            .then((res) => {
-              if (res.status !== 200) {
-                clearState();
-                State.update({ error: true });
-              } else {
-                State.update({
-                  gatewayKey: res.body,
-                  compiled: true,
-                });
-              }
-            })
-            .finally(() => {
-              State.update({ compiling: false });
-            });
-        }
-      });
-    }
-  });
+  })
+    .then((res) => {
+      if (res.status !== 200) {
+        clearState();
+        State.update({ error: true });
+      } else {
+        State.update({
+          gatewayKey: res.body,
+        });
+      }
+    })
+    .finally(() => {
+      State.update({ loading: false });
+    });
 };
 
 const truncateStringInMiddle = (str, maxLength) => {
@@ -336,50 +313,45 @@ return (
           <option
             value={"rust"}
             selected={state.lang === "rust"}
-            disabled={state.compiling || state.compiled || state.error}
+            disabled={state.loading || state.error}
           >
             Rust
           </option>
           <option
             value={"ts"}
             selected={state.lang === "ts"}
-            disabled={state.compiling || state.compiled || state.error}
+            disabled={state.loading || state.error}
           >
             TypeScript
           </option>
         </Select>
-        {state.compiling ? <Text>Compilation may take a while...</Text> : null}
-        <Button onClick={handleCompile} disabled={state.compiling}>
-          {state.compiling ? (
-            <Widget
-              src={`${state.ownerId}/widget/SourceScan.Common.Spinner`}
-              props={{ width: "20px", height: "20px" }}
-            />
-          ) : !state.compiled ? (
-            "Compile"
-          ) : (
-            "Recompile"
-          )}
-        </Button>
-        {state.compiled && state.cid && state.gatewayKey ? (
+        {state.gatewayKey ? (
           <DeployStack>
-            <Text>CID: {truncateStringInMiddle(state.cid, 8)}</Text>
-            <A href={`${state.apiHost}/ipfs/${state.cid}`} target={"_blank"}>
-              <Widget
-                src={`${state.ownerId}/widget/SourceScan.Common.Icons.LinkIcon`}
-                props={{ width: "20px", height: "20px" }}
-              />
-            </A>
+            <Text>
+              You will be redirected to another site for compilation and
+              deployment
+            </Text>
             <A
               href={`${state.appUrl}/gateway?key=${customUriEncode(
                 state.gatewayKey
               )}`}
               target={"_blank"}
             >
-              <Button>Deploy</Button>
+              <Button>Gateway</Button>
             </A>
           </DeployStack>
-        ) : null}
+        ) : (
+          <Button onClick={handleKeyGen} disabled={state.loading}>
+            {!state.loading ? (
+              "Generate Key"
+            ) : (
+              <Widget
+                src={`${ownerId}/widget/SourceScan.Common.Spinner`}
+                props={{ width: "20px", height: "20px" }}
+              />
+            )}
+          </Button>
+        )}
       </>
     ) : null}
   </Stack>
