@@ -360,107 +360,111 @@ const truncateStringInMiddle = (str, maxLength) => {
 
 return (
   <Stack>
-    {!state.key && !state.files ? (
-      <>
-        <Text>Importing from GitHub</Text>
-        <SearchStack>
-          <Widget
-            src={`${state.ownerId}/widget/SourceScan.Inputs.SearchBar`}
-            props={{
-              inputWidth: "160px",
-              placeholder: "Repository URL",
-              theme: state.theme,
-              handleSubmit: handleSubmit,
-              value: state.repo,
-            }}
-          />
-        </SearchStack>
-        {!state.loading && state.repo && state.user ? (
-          <Stack>
-            <ImportStack>
-              <Widget
-                src={`${state.ownerId}/widget/SourceScan.Common.Github.GithubLink`}
-                props={{
-                  github: {
-                    owner: state.user?.name,
-                    repo: state.repo?.name,
-                    sha: state.selectedCommit?.sha,
-                  },
-                  theme: {
-                    color: state.theme.color,
-                    heading: state.theme.heading,
-                  },
-                }}
-              />
-              {state.selectedCommit ? (
-                <Button onClick={handleImport}>Import</Button>
+    {context.accountId ? (
+      !state.key && !state.files ? (
+        <>
+          <Text>Importing from GitHub</Text>
+          <SearchStack>
+            <Widget
+              src={`${state.ownerId}/widget/SourceScan.Inputs.SearchBar`}
+              props={{
+                inputWidth: "160px",
+                placeholder: "Repository URL",
+                theme: state.theme,
+                handleSubmit: handleSubmit,
+                value: state.repo,
+              }}
+            />
+          </SearchStack>
+          {!state.loading && state.repo && state.user ? (
+            <Stack>
+              <ImportStack>
+                <Widget
+                  src={`${state.ownerId}/widget/SourceScan.Common.Github.GithubLink`}
+                  props={{
+                    github: {
+                      owner: state.user?.name,
+                      repo: state.repo?.name,
+                      sha: state.selectedCommit?.sha,
+                    },
+                    theme: {
+                      color: state.theme.color,
+                      heading: state.theme.heading,
+                    },
+                  }}
+                />
+                {state.selectedCommit ? (
+                  <Button onClick={handleImport}>Import</Button>
+                ) : null}
+              </ImportStack>
+              {state.branches ? (
+                <Select onChange={(e) => handleSelectChange(e)}>
+                  {state.branches.map((branch, i) => (
+                    <option
+                      key={i}
+                      value={branch.name}
+                      selected={branch.name === state.selectedBranch}
+                    >
+                      {branch.name}
+                    </option>
+                  ))}
+                </Select>
               ) : null}
-            </ImportStack>
-            {state.branches ? (
-              <Select onChange={(e) => handleSelectChange(e)}>
-                {state.branches.map((branch, i) => (
-                  <option
-                    key={i}
-                    value={branch.name}
-                    selected={branch.name === state.selectedBranch}
-                  >
-                    {branch.name}
-                  </option>
-                ))}
-              </Select>
-            ) : null}
-            {state.commits ? (
-              <CommitsContainer>
-                {state.commits.map((commit, i) => (
-                  <Commit key={i}>
-                    {state.selectedCommit.sha === commit.sha ? (
-                      <SelectedRButton
-                        onClick={() => handleCommitSelect(commit)}
-                      />
-                    ) : (
-                      <RButton onClick={() => handleCommitSelect(commit)} />
-                    )}
-                    <Text>{commit.date.toLocaleDateString()}</Text>
-                    <CommitInfo>
-                      <MHeading>"{commit.message}"</MHeading>
-                      <Text>{" by "}</Text>
-                      <Text>{commit.author}</Text>
-                      <Heading>
-                        ({truncateStringInMiddle(commit.sha, 12)})
-                      </Heading>
-                    </CommitInfo>
-                  </Commit>
-                ))}
-              </CommitsContainer>
-            ) : null}
-          </Stack>
-        ) : state.loading && !state.error ? (
-          <Widget
-            src={`${state.ownerId}/widget/SourceScan.Common.Spinner`}
-            props={{ width: "64px", height: "64px" }}
-          />
-        ) : state.error ? (
-          <Widget
-            src={`${state.ownerId}/widget/SourceScan.Common.ErrorAlert`}
-            props={{ message: "Invalid repository URL" }}
-          />
-        ) : null}
-      </>
+              {state.commits ? (
+                <CommitsContainer>
+                  {state.commits.map((commit, i) => (
+                    <Commit key={i}>
+                      {state.selectedCommit.sha === commit.sha ? (
+                        <SelectedRButton
+                          onClick={() => handleCommitSelect(commit)}
+                        />
+                      ) : (
+                        <RButton onClick={() => handleCommitSelect(commit)} />
+                      )}
+                      <Text>{commit.date.toLocaleDateString()}</Text>
+                      <CommitInfo>
+                        <MHeading>"{commit.message}"</MHeading>
+                        <Text>{" by "}</Text>
+                        <Text>{commit.author}</Text>
+                        <Heading>
+                          ({truncateStringInMiddle(commit.sha, 12)})
+                        </Heading>
+                      </CommitInfo>
+                    </Commit>
+                  ))}
+                </CommitsContainer>
+              ) : null}
+            </Stack>
+          ) : state.loading && !state.error ? (
+            <Widget
+              src={`${state.ownerId}/widget/SourceScan.Common.Spinner`}
+              props={{ width: "64px", height: "64px" }}
+            />
+          ) : state.error ? (
+            <Widget
+              src={`${state.ownerId}/widget/SourceScan.Common.ErrorAlert`}
+              props={{ message: "Invalid repository URL" }}
+            />
+          ) : null}
+        </>
+      ) : (
+        <Widget
+          src={`${state.ownerId}/widget/SourceScan.Upload.Compile`}
+          props={{
+            key: state.key,
+            files: state.files,
+            github: {
+              repo: state.repo.name,
+              owner: state.user.name,
+              sha: state.selectedCommit?.sha,
+            },
+            theme: state.theme,
+            apiHost: state.apiHost,
+          }}
+        />
+      )
     ) : (
-      <Widget
-        src={`${state.ownerId}/widget/SourceScan.Upload.Compile`}
-        props={{
-          key: state.key,
-          files: state.files,
-          github: {
-            repo: state.repo.name,
-            owner: state.user.name,
-            sha: state.selectedCommit?.sha,
-          },
-          theme: state.theme,
-          apiHost: state.apiHost,
-        }}
-      />
+      <Text>Please login to your account</Text>
     )}
   </Stack>
 );
