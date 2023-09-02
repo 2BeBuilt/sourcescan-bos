@@ -80,7 +80,6 @@ const Center = styled.div`
 
 const EPContainer = styled.div`
   height: 100%;
-  width: 400px;
   padding: 10px;
   border-radius: 6px;
   border-style: dashed;
@@ -103,7 +102,8 @@ const EntryPoint = styled.div`
   align-items: center;
   justify-content: start;
   gap: 25px;
-  padding: 15px;
+  padding-top: 25px;
+  padding-bottom: 25px;
 `;
 
 const RButton = styled.button`
@@ -130,6 +130,16 @@ const Text = styled.div`
 
   @media only screen and (max-width: 750px) {
     max-width: 200px;
+  }
+`;
+
+const Heading = styled.div`
+  font-size: ${state.theme.heading.fontSize};
+  font-weight: ${state.theme.heading.fontWeight};
+  color: ${state.theme.color};
+
+  @media only screen and (max-width: 750px) {
+    width: 200px;
   }
 `;
 
@@ -181,10 +191,9 @@ const Select = styled.select`
 `;
 
 const Button = styled.button`
-  height: 36px;
   font-weight: 600;
   border-radius: 6px;
-  padding: 5px;
+  padding: 15px;
   border: 1px dashed ${state.theme.border};
   color: ${state.theme.color};
   background-color: ${state.theme.bg};
@@ -293,7 +302,7 @@ const customUriEncode = (str) => {
 
 return (
   <Stack>
-    <Text>Select entry point</Text>
+    <Heading>Select entry point</Heading>
     <EPContainer>
       {state.files.map((file, i) => (
         <EntryPoint key={i}>
@@ -302,13 +311,13 @@ return (
           ) : (
             <RButton onClick={() => handleEntryPointSelect(file)} />
           )}
-          <Text>{file}</Text>
+          <Heading>{file}</Heading>
         </EntryPoint>
       ))}
     </EPContainer>
     {state.entryPoint ? (
       <>
-        <Text>What to compile</Text>
+        <Heading>What to compile</Heading>
         <Select onChange={(e) => handleLangChange(e)}>
           <option
             value={"rust"}
@@ -327,10 +336,10 @@ return (
         </Select>
         {state.gatewayKey ? (
           <DeployStack>
-            <Text>
+            <Heading>
               You will be redirected to another site for compilation and
               deployment
-            </Text>
+            </Heading>
             <A
               href={`${state.appUrl}/gateway?key=${customUriEncode(
                 state.gatewayKey
@@ -346,7 +355,7 @@ return (
               "Generate Key"
             ) : (
               <Widget
-                src={`${ownerId}/widget/SourceScan.Common.Spinner`}
+                src={`${state.ownerId}/widget/SourceScan.Common.Spinner`}
                 props={{ width: "20px", height: "20px" }}
               />
             )}

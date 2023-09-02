@@ -363,7 +363,7 @@ return (
     {context.accountId ? (
       !state.key && !state.files ? (
         <>
-          <Text>Importing from GitHub</Text>
+          <Heading>Importing from GitHub</Heading>
           <SearchStack>
             <Widget
               src={`${state.ownerId}/widget/SourceScan.Inputs.SearchBar`}
@@ -464,7 +464,7 @@ return (
         />
       )
     ) : (
-      <Text>Please login to your account</Text>
+      <Heading>Please login to your account</Heading>
     )}
   </Stack>
 );
