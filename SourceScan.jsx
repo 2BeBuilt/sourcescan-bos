@@ -16,7 +16,7 @@ const getConfig = (network) => {
         ownerId: "sourcescan.near",
         rpcUrl: "https://rpc.mainnet.near.org",
         contractId: "sourcescan.near",
-        apiHost: "https://sourcescan.2bb.dev",
+        apiHost: "https://sourcescan-api.2bb.dev",
       };
     case "testnet":
       return {
@@ -24,7 +24,7 @@ const getConfig = (network) => {
         ownerId: "sourcescan.testnet",
         rpcUrl: "https://rpc.testnet.near.org",
         contractId: "sourcescan.testnet",
-        apiHost: "https://sourcescan.2bb.dev",
+        apiHost: "https://sourcescan-api.2bb.dev",
       };
     default:
       throw Error(`Unconfigured environment '${network}'.`);
@@ -246,6 +246,7 @@ const pages = {
     <Widget
       src={`${state.config.ownerId}/widget/SourceScan.Contracts.Info`}
       props={{
+        apiHost: state.config.apiHost,
         contractId: props.contractId,
         theme: useTheme(
           {

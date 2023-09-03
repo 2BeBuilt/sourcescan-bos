@@ -4,7 +4,7 @@ const useNetwork = (mainnet, testnet) => {
 
 State.init({
   ownerId: useNetwork("sourcescan.near", "sourcescan.testnet"),
-  apiHost: "https://sourcescan.2bb.dev",
+  apiHost: props.apiHost || "https://sourcescan-api.2bb.dev",
   rpcUrl: useNetwork(
     "https://rpc.mainnet.near.org",
     "https://rpc.testnet.near.org"

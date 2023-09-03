@@ -7,7 +7,7 @@ State.init({
     "https://sourcescan.2bb.dev",
     "https://sourcescan.testnet.2bb.dev"
   ),
-  apiHost: props.apiHost || "https://sourcescan.2bb.dev",
+  apiHost: props.apiHost || "https://sourcescan-api.2bb.dev",
   ownerId: useNetwork("sourcescan.near", "sourcescan.testnet"),
   theme: props.theme || {
     name: "light",
