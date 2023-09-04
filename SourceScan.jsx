@@ -63,7 +63,7 @@ const dark = {
 const light = {
   name: "light",
   bg: "#e3e8ef",
-  color: "#4c5566",
+  color: "#1b202b",
   border: "#748094",
   hover: {
     bg: "#eef2f6",
