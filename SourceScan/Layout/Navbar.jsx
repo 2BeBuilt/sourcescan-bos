@@ -73,6 +73,10 @@ const NavButton = styled.button`
   :hover {
     background-color: ${state.theme.hover.bg};
   }
+
+  @media only screen and (max-width: 750px) {
+    width: auto;
+  }
 `;
 
 const NetworkSwitcherContainer = styled.div`
