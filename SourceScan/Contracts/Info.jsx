@@ -110,6 +110,9 @@ const UHeading = styled.div`
   font-size: ${state.theme.heading.fontSize};
   font-weight: ${state.theme.heading.fontWeight};
   text-decoration: ${state.theme.heading.underline ? "underline" : "none"};
+  -webkit-text-decoration-line: ${state.theme.heading.underline
+    ? "underline"
+    : "none"};
   text-underline-offset: 6px;
   text-decoration-style: dashed;
   text-decoration-color: gray;
@@ -258,8 +261,6 @@ if (state.contract) {
   wasmCheck();
   txCheck();
 }
-
-console.log(state.theme);
 
 return (
   <Center>
