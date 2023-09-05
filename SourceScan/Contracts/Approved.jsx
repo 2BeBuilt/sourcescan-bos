@@ -79,8 +79,8 @@ return (
       <Widget
         src={`${state.ownerId}/widget/SourceScan.Common.Icons.CrossIcon`}
         props={{
-          width: "32px",
-          height: "32px",
+          width: "20px",
+          height: "20px",
           tooltip: {
             placement: props.placement,
             label: state.error ? "Error" : "Not approved",
