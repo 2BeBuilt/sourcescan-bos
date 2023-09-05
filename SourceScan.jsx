@@ -151,7 +151,6 @@ const switchTheme = () => {
 };
 
 const handleSubmit = (value) => {
-  console.log(value);
   State.update({ search: value });
   searchContracts();
 };
@@ -163,7 +162,6 @@ const searchContracts = async () => {
     limit: state.limit,
   })
     .then((res) => {
-      console.log(res);
       State.update({
         pages: res[1],
         contracts: res[0],

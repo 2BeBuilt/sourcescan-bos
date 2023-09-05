@@ -46,7 +46,6 @@ const range = (start, stop, step) =>
   );
 
 const handlePageChange = (x) => {
-  console.log(x);
   State.update({
     selectedPage: x + 1,
     from_index: x * state.limit,
