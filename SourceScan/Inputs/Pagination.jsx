@@ -19,25 +19,23 @@ const HStack = styled.div`
   justify-content: center;
   text-align: center;
   flex-direction: row;
-  gap: 5px;
+  gap: 10px;
 `;
 
 const PageButton = styled.button`
   font-weight: 600;
-  width: 32px;
-  height: 32px;
   border-radius: 5px;
-  border: 1px solid ${state.theme.border};
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 16px;
+  padding-right: 16px;
+  border: 1px dashed ${state.theme.border};
   color: ${state.theme.color};
   background-color: ${state.theme.bg};
   transition: background-color 0.1s ease-in-out;
 
   :hover {
     background-color: ${state.theme.hover.bg};
-  }
-
-  @media only screen and (max-width: 750px) {
-    width: auto;
   }
 `;
 

@@ -62,8 +62,10 @@ const HStack = styled.div`
 const NavButton = styled.button`
   font-weight: 600;
   font-size: 18px;
-  width: 140px;
-  height: 40px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 15px;
+  padding-right: 15px;
   border-radius: 40px;
   border: 1px solid transparent;
   color: ${state.theme.color};
@@ -72,10 +74,6 @@ const NavButton = styled.button`
 
   :hover {
     background-color: ${state.theme.hover.bg};
-  }
-
-  @media only screen and (max-width: 750px) {
-    width: auto;
   }
 `;
 

@@ -119,7 +119,7 @@ const Mobile = styled.div`
 
   @media only screen and (max-width: 750px) {
     display: flex;
-    width: 230%;
+    width: 250%;
   }
 `;
 
