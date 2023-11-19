@@ -265,7 +265,7 @@ const pages = {
   ),
   upload: (
     <Widget
-      src={`${state.config.ownerId}/widget/SourceScan.Upload.Github`}
+      src={`${state.config.ownerId}/widget/SourceScan.Upload.Verify`}
       props={{
         theme: useTheme(light, dark),
         apiHost: state.config.apiHost,
