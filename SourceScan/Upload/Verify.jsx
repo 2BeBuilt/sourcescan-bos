@@ -24,15 +24,8 @@ State.init({
   },
   loading: false,
   error: false,
-  user: null,
   contractId: null,
-  branches: null,
-  selectedBranch: null,
-  selectedPage: 1,
-  commits: null,
-  selectedCommit: null,
-  key: null,
-  files: null,
+  codeHash: null,
 });
 
 const Stack = styled.div`
@@ -201,17 +194,51 @@ const clearState = () => {
   State.update({
     loading: false,
     error: false,
-    user: null,
-    repo: null,
-    branches: null,
-    selectedBranch: null,
-    selectedPage: 1,
+    contractId: null,
+    codeHash: null,
   });
 };
 
 const handleSubmit = (value) => {
+  clearState();
+
   State.update({ loading: true });
-  // loading contract
+
+  const options = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      jsonrpc: "2.0",
+      id: "dontcare",
+      method: "query",
+      params: {
+        request_type: "view_code",
+        finality: "final",
+        account_id: value,
+      },
+    }),
+  };
+  asyncFetch(props.rpcUrl, options)
+    .then((rpc_res) => {
+      console.log(rpc_res);
+
+      if (rpc_res.body.error) {
+        State.update({ error: rpc_res.body.error.cause.name });
+      }
+
+      State.update({
+        contractId: value,
+        codeHash: rpc_res.body.result.hash,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+    .finally(() => {
+      State.update({ loading: false });
+    });
 };
 
 const truncateStringInMiddle = (str, maxLength) => {
@@ -225,6 +252,8 @@ const truncateStringInMiddle = (str, maxLength) => {
 
   return firstHalf + "..." + secondHalf;
 };
+
+console.log(state);
 
 return (
   <Stack>
@@ -243,6 +272,25 @@ return (
             }}
           />
         </SearchStack>
+        {state.error && state.error !== "NO_CONTRACT_CODE" ? (
+          <Widget
+            src={`${state.ownerId}/widget/SourceScan.Common.ErrorAlert`}
+            props={{
+              message: "Error while loading contract from rpc",
+            }}
+          />
+        ) : (
+          <>
+            <Heading>{state.contractId}</Heading>
+            {state.contractId ? (
+              state.error === "NO_CONTRACT_CODE" ? (
+                <Heading>No contract code found</Heading>
+              ) : (
+                <Heading>Code hash: {state.codeHash}</Heading>
+              )
+            ) : null}
+          </>
+        )}
       </>
     ) : (
       <Heading>Please login to your account</Heading>
