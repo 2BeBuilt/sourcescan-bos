@@ -150,7 +150,7 @@ const Stack = styled.div`
   text-align: center;
   align-items: center;
   justify-content: center;
-  gap: 35px;
+  gap: 55px;
 `;
 
 const DeployStack = styled.div`
@@ -170,6 +170,7 @@ const HStack = styled.div`
   text-align: center;
   align-items: center;
   justify-content: center;
+  gap: 25px;
 `;
 
 const HeadingStack = styled.div`
@@ -311,7 +312,7 @@ const customUriEncode = (str) => {
 
 return (
   <Stack>
-    <Heading>Select entry point</Heading>
+    <Heading>3. Select entry point</Heading>
     <EPContainer>
       {state.files.map((file, i) => (
         <EntryPoint key={i}>
@@ -326,7 +327,7 @@ return (
     </EPContainer>
     {state.entryPoint ? (
       <>
-        <Heading>What to compile</Heading>
+        <Heading>4. What to compile</Heading>
         <Select onChange={(e) => handleLangChange(e)}>
           <option
             value={"rust"}
@@ -339,6 +340,7 @@ return (
             TypeScript
           </option>
         </Select>
+        <Heading>5. How to verify</Heading>
         <HStack>
           <HeadingStack>
             <Widget

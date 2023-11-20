@@ -259,12 +259,12 @@ return (
   <Stack>
     {context.accountId ? (
       <>
-        <Heading>Contract to verify</Heading>
+        <Heading>1. Select contract to verify</Heading>
         <SearchStack>
           <Widget
             src={`${state.ownerId}/widget/SourceScan.Inputs.SearchBar`}
             props={{
-              inputWidth: "160px",
+              inputWidth: "180px",
               placeholder: "Account ID",
               theme: state.theme,
               handleSubmit: handleSubmit,

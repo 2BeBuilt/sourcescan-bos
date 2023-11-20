@@ -42,7 +42,7 @@ const Stack = styled.div`
   text-align: center;
   align-items: center;
   justify-content: center;
-  gap: 35px;
+  gap: 55px;
 `;
 
 const HStack = styled.div`
@@ -363,12 +363,12 @@ return (
     {context.accountId ? (
       !state.key && !state.files ? (
         <>
-          <Heading>Source Code GitHub Repo</Heading>
+          <Heading>2. Specify source code GitHub repo</Heading>
           <SearchStack>
             <Widget
               src={`${state.ownerId}/widget/SourceScan.Inputs.SearchBar`}
               props={{
-                inputWidth: "160px",
+                inputWidth: "180px",
                 placeholder: "Repository URL",
                 theme: state.theme,
                 handleSubmit: handleSubmit,
@@ -449,7 +449,7 @@ return (
         </>
       ) : (
         <Widget
-          src={`${state.ownerId}/widget/SourceScan.Upload.Compile`}
+          src={`${state.ownerId}/widget/SourceScan.Verify.Compile`}
           props={{
             key: state.key,
             files: state.files,
