@@ -172,6 +172,15 @@ const HStack = styled.div`
   justify-content: center;
 `;
 
+const HeadingStack = styled.div`
+  display: flex;
+  flex-direction: row;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+`;
+
 const Select = styled.select`
   cursor: pointer;
   border: 1px solid ${state.theme.border};
@@ -326,14 +335,26 @@ return (
           >
             Rust
           </option>
-          <option
-            value={"ts"}
-            selected={state.lang === "ts"}
-            disabled={state.loading || state.error}
-          >
+          <option value={"ts"} selected={state.lang === "ts"} disabled={true}>
             TypeScript
           </option>
         </Select>
+        <HStack>
+          <HeadingStack>
+            <Widget
+              src={`${state.ownerId}/widget/SourceScan.Common.Icons.DockerIcon`}
+              props={{ width: "32px", height: "32px" }}
+            />
+            <Heading>Docker</Heading>
+          </HeadingStack>
+          <HeadingStack>
+            <Widget
+              src={`${state.ownerId}/widget/SourceScan.Common.Icons.KeyIcon`}
+              props={{ width: "26px", height: "26px" }}
+            />
+            <Heading>FAK</Heading>
+          </HeadingStack>
+        </HStack>
         {state.gatewayKey ? (
           <DeployStack>
             <Heading>

@@ -35,7 +35,7 @@ const Stack = styled.div`
   text-align: center;
   align-items: center;
   justify-content: center;
-  gap: 35px;
+  gap: 55px;
 `;
 
 const HStack = styled.div`
@@ -45,15 +45,6 @@ const HStack = styled.div`
   align-items: center;
   justify-content: center;
   gap: 25px;
-`;
-
-const HeadingStack = styled.div`
-  display: flex;
-  flex-direction: row;
-  text-align: center;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
 `;
 
 const ImportStack = styled.div`
@@ -296,36 +287,7 @@ return (
                 <Heading>No contract code found</Heading>
               ) : (
                 <>
-                  <Widget
-                    src={`${state.ownerId}/widget/SourceScan.Contracts.Info`}
-                    props={{
-                      contractId: state.contractId,
-                      theme: {
-                        ...state.theme,
-                        border: `1px dashed ${light.border}`,
-                        heading: {
-                          ...light.heading,
-                          underline: true,
-                        },
-                      },
-                    }}
-                  />
-                  <HStack>
-                    <HeadingStack>
-                      <Widget
-                        src={`${state.ownerId}/widget/SourceScan.Common.Icons.DockerIcon`}
-                        props={{ width: "32px", height: "32px" }}
-                      />
-                      <Heading>Docker</Heading>
-                    </HeadingStack>
-                    <HeadingStack>
-                      <Widget
-                        src={`${state.ownerId}/widget/SourceScan.Common.Icons.KeyIcon`}
-                        props={{ width: "26px", height: "26px" }}
-                      />
-                      <Heading>FAK</Heading>
-                    </HeadingStack>
-                  </HStack>
+                  <Heading>{state.codeHash}</Heading>
                   <Widget
                     src={`${state.ownerId}/widget/SourceScan.Verify.Github`}
                     props={{

@@ -363,7 +363,7 @@ return (
     {context.accountId ? (
       !state.key && !state.files ? (
         <>
-          <Heading>Importing from GitHub</Heading>
+          <Heading>Source Code GitHub Repo</Heading>
           <SearchStack>
             <Widget
               src={`${state.ownerId}/widget/SourceScan.Inputs.SearchBar`}
@@ -394,7 +394,7 @@ return (
                   }}
                 />
                 {state.selectedCommit ? (
-                  <Button onClick={handleImport}>Import</Button>
+                  <Button onClick={handleImport}>Select</Button>
                 ) : null}
               </ImportStack>
               {state.branches ? (

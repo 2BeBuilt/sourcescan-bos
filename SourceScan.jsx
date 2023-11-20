@@ -273,6 +273,16 @@ const pages = {
       }}
     />
   ),
+  docs: (
+    <Widget
+      src={`${state.config.ownerId}/widget/SourceScan.Docs.Page`}
+      props={{
+        rpcUrl: state.config.rpcUrl,
+        theme: useTheme(light, dark),
+        apiHost: state.config.apiHost,
+      }}
+    />
+  ),
 };
 
 return (

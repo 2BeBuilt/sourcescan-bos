@@ -19,8 +19,8 @@ const pages = [
   },
   {
     label: "Docs",
-    href: ``,
-    target: "_blank",
+    href: `#/${state.ownerId}/widget/SourceScan?page=docs`,
+    target: "_self",
   },
 ];
 
