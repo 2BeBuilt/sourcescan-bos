@@ -47,6 +47,15 @@ const HStack = styled.div`
   gap: 25px;
 `;
 
+const HeadingStack = styled.div`
+  display: flex;
+  flex-direction: row;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+`;
+
 const ImportStack = styled.div`
   display: flex;
   flex-direction: row;
@@ -302,8 +311,20 @@ return (
                     }}
                   />
                   <HStack>
-                    <Heading>Docker</Heading>
-                    <Heading>Full Access Key</Heading>
+                    <HeadingStack>
+                      <Widget
+                        src={`${state.ownerId}/widget/SourceScan.Common.Icons.DockerIcon`}
+                        props={{ width: "32px", height: "32px" }}
+                      />
+                      <Heading>Docker</Heading>
+                    </HeadingStack>
+                    <HeadingStack>
+                      <Widget
+                        src={`${state.ownerId}/widget/SourceScan.Common.Icons.KeyIcon`}
+                        props={{ width: "26px", height: "26px" }}
+                      />
+                      <Heading>FAK</Heading>
+                    </HeadingStack>
                   </HStack>
                   <Widget
                     src={`${state.ownerId}/widget/SourceScan.Verify.Github`}
