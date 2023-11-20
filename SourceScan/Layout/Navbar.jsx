@@ -9,13 +9,18 @@ const useThemeName = (light, dark) => {
 const pages = [
   {
     label: "Verify",
-    href: `#/${state.ownerId}/widget/SourceScan?page=upload`,
+    href: `#/${state.ownerId}/widget/SourceScan?page=verify`,
     target: "_self",
   },
   {
     label: "Scan",
     href: `#/${state.ownerId}/widget/SourceScan`,
     target: "_self",
+  },
+  {
+    label: "Docs",
+    href: ``,
+    target: "_blank",
   },
 ];
 

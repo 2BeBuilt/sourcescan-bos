@@ -263,9 +263,9 @@ const pages = {
       }}
     />
   ),
-  upload: (
+  verify: (
     <Widget
-      src={`${state.config.ownerId}/widget/SourceScan.Upload.Verify`}
+      src={`${state.config.ownerId}/widget/SourceScan.Verify.Page`}
       props={{
         rpcUrl: state.config.rpcUrl,
         theme: useTheme(light, dark),

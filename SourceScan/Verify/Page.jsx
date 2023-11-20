@@ -286,8 +286,40 @@ return (
               state.error === "NO_CONTRACT_CODE" ? (
                 <Heading>No contract code found</Heading>
               ) : (
-                <Heading>Code hash: {state.codeHash}</Heading>
+                <>
+                  <Widget
+                    src={`${state.ownerId}/widget/SourceScan.Contracts.Info`}
+                    props={{
+                      contractId: state.contractId,
+                      theme: {
+                        ...state.theme,
+                        border: `1px dashed ${light.border}`,
+                        heading: {
+                          ...light.heading,
+                          underline: true,
+                        },
+                      },
+                    }}
+                  />
+                  <HStack>
+                    <Heading>Docker</Heading>
+                    <Heading>Full Access Key</Heading>
+                  </HStack>
+                  <Widget
+                    src={`${state.ownerId}/widget/SourceScan.Verify.Github`}
+                    props={{
+                      rpcUrl: props.rpcUrl,
+                      theme: state.theme,
+                      apiHost: state.apiHost,
+                    }}
+                  />
+                </>
               )
+            ) : state.loading ? (
+              <Widget
+                src={`${state.ownerId}/widget/SourceScan.Common.Spinner`}
+                props={{ width: "64px", height: "64px" }}
+              />
             ) : null}
           </>
         )}
