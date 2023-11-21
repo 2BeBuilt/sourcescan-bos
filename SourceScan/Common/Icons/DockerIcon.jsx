@@ -1,7 +1,8 @@
 State.init({
+  cursor: props.cursor || "pointer",
   tooltip: props.tooltip || {
     placement: "top",
-    label: "Approved",
+    label: "Docker",
   },
 });
 
@@ -17,6 +18,7 @@ const DockerIcon = (width, height) => {
       aria-label="Docker"
       role="img"
       viewBox="0 0 512 512"
+      cursor={state.cursor}
     >
       <path
         stroke="currentColor"
@@ -31,4 +33,16 @@ const DockerIcon = (width, height) => {
   );
 };
 
-return <DockerIcon width={props.width} height={props.height} />;
+return (
+  <OverlayTrigger
+    key={state.tooltip.placement}
+    placement={state.tooltip.placement}
+    overlay={
+      <Tooltip id={`tooltip-${state.tooltip.placement}`}>
+        {state.tooltip.label}
+      </Tooltip>
+    }
+  >
+    <DockerIcon width={props.width} height={props.height} />
+  </OverlayTrigger>
+);

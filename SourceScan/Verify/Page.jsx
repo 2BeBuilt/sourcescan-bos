@@ -253,8 +253,6 @@ const truncateStringInMiddle = (str, maxLength) => {
   return firstHalf + "..." + secondHalf;
 };
 
-console.log(state);
-
 return (
   <Stack>
     {context.accountId ? (
@@ -283,21 +281,23 @@ return (
           <>
             <Heading>{state.contractId}</Heading>
             {state.contractId ? (
-              state.error === "NO_CONTRACT_CODE" ? (
-                <Heading>No contract code found</Heading>
-              ) : (
-                <>
-                  <Heading>{state.codeHash}</Heading>
-                  <Widget
-                    src={`${state.ownerId}/widget/SourceScan.Verify.Github`}
-                    props={{
-                      rpcUrl: props.rpcUrl,
-                      theme: state.theme,
-                      apiHost: state.apiHost,
-                    }}
-                  />
-                </>
-              )
+              <>
+                {state.error === "NO_CONTRACT_CODE" ? (
+                  <Heading>No contract code found</Heading>
+                ) : (
+                  <Heading>
+                    Code hash: {truncateStringInMiddle(state.codeHash, 8)}
+                  </Heading>
+                )}
+                <Widget
+                  src={`${state.ownerId}/widget/SourceScan.Verify.Github`}
+                  props={{
+                    rpcUrl: props.rpcUrl,
+                    theme: state.theme,
+                    apiHost: state.apiHost,
+                  }}
+                />
+              </>
             ) : state.loading ? (
               <Widget
                 src={`${state.ownerId}/widget/SourceScan.Common.Spinner`}

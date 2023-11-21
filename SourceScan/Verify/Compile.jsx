@@ -34,6 +34,7 @@ State.init({
   loading: false,
   error: false,
   gatewayKey: null,
+  verification: null,
 });
 
 const clearState = () => {
@@ -179,7 +180,7 @@ const HeadingStack = styled.div`
   text-align: center;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: 15%;
 `;
 
 const Select = styled.select`
@@ -310,6 +311,14 @@ const customUriEncode = (str) => {
   return encodedStr;
 };
 
+const handleVerificationSelect = (verification) => {
+  State.update({
+    verification: verification,
+  });
+};
+
+console.log(state);
+
 return (
   <Stack>
     <Heading>3. Select entry point</Heading>
@@ -343,47 +352,60 @@ return (
         <Heading>5. How to verify</Heading>
         <HStack>
           <HeadingStack>
-            <Widget
-              src={`${state.ownerId}/widget/SourceScan.Common.Icons.DockerIcon`}
-              props={{ width: "32px", height: "32px" }}
-            />
-            <Heading>Docker</Heading>
-          </HeadingStack>
-          <HeadingStack>
-            <Widget
-              src={`${state.ownerId}/widget/SourceScan.Common.Icons.KeyIcon`}
-              props={{ width: "26px", height: "26px" }}
-            />
-            <Heading>FAK</Heading>
+            <div onClick={() => handleVerificationSelect("Docker")}>
+              <Widget
+                src={`${state.ownerId}/widget/SourceScan.Common.Icons.DockerIcon`}
+                props={{
+                  width: "64px",
+                  height: "64px",
+                }}
+              />
+            </div>
+            <Heading>or</Heading>
+            <div onClick={() => handleVerificationSelect("FAK")}>
+              <Widget
+                src={`${state.ownerId}/widget/SourceScan.Common.Icons.KeyIcon`}
+                props={{
+                  width: "58px",
+                  height: "58px",
+                }}
+              />
+            </div>
           </HeadingStack>
         </HStack>
-        {state.gatewayKey ? (
-          <DeployStack>
-            <Heading>
-              You will be redirected to another site for compilation and
-              deployment
-            </Heading>
-            <A
-              href={`${state.appUrl}/gateway?key=${customUriEncode(
-                state.gatewayKey
-              )}`}
-              target={"_blank"}
-            >
-              <Button>Gateway</Button>
-            </A>
-          </DeployStack>
-        ) : (
-          <Button onClick={handleKeyGen} disabled={state.loading}>
-            {!state.loading ? (
-              "Generate Key"
-            ) : (
-              <Widget
-                src={`${state.ownerId}/widget/SourceScan.Common.Spinner`}
-                props={{ width: "20px", height: "20px" }}
-              />
-            )}
-          </Button>
-        )}
+        {state.verification === "Docker" ? (
+          <>
+            <Heading>Coming soon...</Heading>
+          </>
+        ) : state.verification === "FAK" ? (
+          state.gatewayKey ? (
+            <DeployStack>
+              <Heading>
+                You will be redirected to another site for compilation and
+                deployment
+              </Heading>
+              <A
+                href={`${state.appUrl}/gateway?key=${customUriEncode(
+                  state.gatewayKey
+                )}`}
+                target={"_blank"}
+              >
+                <Button>Gateway</Button>
+              </A>
+            </DeployStack>
+          ) : (
+            <Button onClick={handleKeyGen} disabled={state.loading}>
+              {!state.loading ? (
+                "Generate Key"
+              ) : (
+                <Widget
+                  src={`${state.ownerId}/widget/SourceScan.Common.Spinner`}
+                  props={{ width: "20px", height: "20px" }}
+                />
+              )}
+            </Button>
+          )
+        ) : null}
       </>
     ) : null}
   </Stack>

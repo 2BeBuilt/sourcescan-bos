@@ -1,7 +1,8 @@
 State.init({
+  cursor: props.cursor || "pointer",
   tooltip: props.tooltip || {
     placement: "top",
-    label: "Approved",
+    label: "Full Access Key",
   },
 });
 
@@ -16,6 +17,7 @@ const KeyIcon = (width, height) => {
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 20 20"
       fill="currentColor"
+      cursor={state.cursor}
     >
       <path
         fill-rule="evenodd"
@@ -26,4 +28,16 @@ const KeyIcon = (width, height) => {
   );
 };
 
-return <KeyIcon width={props.width} height={props.height} />;
+return (
+  <OverlayTrigger
+    key={state.tooltip.placement}
+    placement={state.tooltip.placement}
+    overlay={
+      <Tooltip id={`tooltip-${state.tooltip.placement}`}>
+        {state.tooltip.label}
+      </Tooltip>
+    }
+  >
+    <KeyIcon width={props.width} height={props.height} />
+  </OverlayTrigger>
+);
