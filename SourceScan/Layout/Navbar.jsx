@@ -138,10 +138,7 @@ return (
       </NetworkSwitcherContainer>
       <RStack>
         <Mobile>
-          <a
-            href={`#/${state.ownerId}/widget/SourceScan?page=upload`}
-            target={"_self"}
-          >
+          <a href={`#/${state.ownerId}/widget/SourceScan`} target={"_self"}>
             <Logo
               src={
                 "https://ipfs.io/ipfs/bafkreibfot4vz22olyjagjtr5qk7m4rpybwy3jb2x3bjfvjl5zzv3biluq"
@@ -152,10 +149,7 @@ return (
         </Mobile>
         <HStack>
           <Desktop>
-            <a
-              href={`#/${state.ownerId}/widget/SourceScan?page=upload`}
-              target={"_self"}
-            >
+            <a href={`#/${state.ownerId}/widget/SourceScan`} target={"_self"}>
               <Logo
                 src={
                   "https://ipfs.io/ipfs/bafkreibfot4vz22olyjagjtr5qk7m4rpybwy3jb2x3bjfvjl5zzv3biluq"
