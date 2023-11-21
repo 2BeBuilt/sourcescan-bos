@@ -11,16 +11,19 @@ const pages = [
     label: "Verify",
     href: `#/${state.ownerId}/widget/SourceScan?page=verify`,
     target: "_self",
+    icon: `${state.ownerId}/widget/SourceScan.Common.Icons.VerifyIcon`,
   },
   {
     label: "Scan",
     href: `#/${state.ownerId}/widget/SourceScan`,
     target: "_self",
+    icon: `${state.ownerId}/widget/SourceScan.Common.Icons.SearchIcon`,
   },
   {
     label: "Docs",
     href: `#/${state.ownerId}/widget/SourceScan?page=docs`,
     target: "_self",
+    icon: `${state.ownerId}/widget/SourceScan.Common.Icons.DocsIcon`,
   },
 ];
 
@@ -80,6 +83,15 @@ const NavButton = styled.button`
   :hover {
     background-color: ${state.theme.hover.bg};
   }
+`;
+
+const NavButtonStack = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+  justify-content: center;
+  align-items: center;
 `;
 
 const NetworkSwitcherContainer = styled.div`
@@ -161,10 +173,26 @@ return (
           {pages.map((page, i) => {
             return page.href ? (
               <a key={i} href={page.href} target={page.target}>
-                <NavButton>{page.label}</NavButton>
+                <NavButton>
+                  <NavButtonStack>
+                    <Widget
+                      src={page.icon}
+                      props={{ width: "18px", height: "18px" }}
+                    />
+                    {page.label}
+                  </NavButtonStack>
+                </NavButton>
               </a>
             ) : (
-              <NavButton key={i}>{page.label}</NavButton>
+              <NavButton key={i}>
+                <NavButtonStack>
+                  <Widget
+                    src={page.icon}
+                    props={{ width: "18px", height: "18px" }}
+                  />
+                  {page.label}
+                </NavButtonStack>
+              </NavButton>
             );
           })}
         </HStack>
