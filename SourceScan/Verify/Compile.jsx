@@ -3,11 +3,8 @@ const useNetwork = (mainnet, testnet) => {
 };
 
 State.init({
-  appUrl: useNetwork(
-    "https://sourcescan.2bb.dev",
-    "https://sourcescan.testnet.2bb.dev"
-  ),
-  apiHost: props.apiHost || "https://sourcescan-api.2bb.dev",
+  appUrl: props.appUrl,
+  apiHost: props.apiHost,
   ownerId: useNetwork("sourcescan.near", "sourcescan.testnet"),
   theme: props.theme || {
     name: "light",
@@ -245,7 +242,8 @@ const handleLangChange = (e) => {
 };
 
 const handleKeyGen = () => {
-  if (state.loading || state.gatewayKey || state.error) return;
+  if (state.loading || state.gatewayKey || state.error || !props.contractId)
+    return;
 
   State.update({
     loading: true,
@@ -261,7 +259,7 @@ const handleKeyGen = () => {
       lang: state.lang,
       entry_point: state.entryPoint,
       github: state.github,
-      account_id: context.accountId,
+      account_id: props.contractId,
     }),
   })
     .then((res) => {
@@ -316,8 +314,6 @@ const handleVerificationSelect = (verification) => {
     verification: verification,
   });
 };
-
-console.log(state);
 
 return (
   <Stack>

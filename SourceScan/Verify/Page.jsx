@@ -5,6 +5,7 @@ const useNetwork = (mainnet, testnet) => {
 State.init({
   ownerId: useNetwork("sourcescan.near", "sourcescan.testnet"),
   apiHost: props.apiHost || "https://sourcsecan.2bb.dev",
+  appUrl: props.appUrl,
   theme: props.theme || {
     name: "light",
     bg: "#e3e8ef",
@@ -222,8 +223,6 @@ const handleSubmit = (value) => {
   };
   asyncFetch(props.rpcUrl, options)
     .then((rpc_res) => {
-      console.log(rpc_res);
-
       if (rpc_res.body.error) {
         State.update({ error: rpc_res.body.error.cause.name });
       }
@@ -295,6 +294,8 @@ return (
                     rpcUrl: props.rpcUrl,
                     theme: state.theme,
                     apiHost: state.apiHost,
+                    appUrl: state.appUrl,
+                    contractId: state.contractId,
                   }}
                 />
               </>

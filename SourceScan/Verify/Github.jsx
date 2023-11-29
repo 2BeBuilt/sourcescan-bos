@@ -4,6 +4,7 @@ const useNetwork = (mainnet, testnet) => {
 
 State.init({
   ownerId: useNetwork("sourcescan.near", "sourcescan.testnet"),
+  appUrl: props.appUrl,
   apiHost: props.apiHost || "https://sourcsecan.2bb.dev",
   theme: props.theme || {
     name: "light",
@@ -451,6 +452,8 @@ return (
         <Widget
           src={`${state.ownerId}/widget/SourceScan.Verify.Compile`}
           props={{
+            appUrl: state.appUrl,
+            contractId: props.contractId,
             key: state.key,
             files: state.files,
             github: {
