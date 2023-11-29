@@ -254,62 +254,56 @@ const truncateStringInMiddle = (str, maxLength) => {
 
 return (
   <Stack>
-    {context.accountId ? (
-      <>
-        <Heading>1. Select contract to verify</Heading>
-        <SearchStack>
-          <Widget
-            src={`${state.ownerId}/widget/SourceScan.Inputs.SearchBar`}
-            props={{
-              inputWidth: "180px",
-              placeholder: "Account ID",
-              theme: state.theme,
-              handleSubmit: handleSubmit,
-              value: state.contractId,
-            }}
-          />
-        </SearchStack>
-        {state.error && state.error !== "NO_CONTRACT_CODE" ? (
-          <Widget
-            src={`${state.ownerId}/widget/SourceScan.Common.ErrorAlert`}
-            props={{
-              message: "Error while loading contract from rpc",
-            }}
-          />
-        ) : (
-          <>
-            <Heading>{state.contractId}</Heading>
-            {state.contractId ? (
-              <>
-                {state.error === "NO_CONTRACT_CODE" ? (
-                  <Heading>No contract code found</Heading>
-                ) : (
-                  <Heading>
-                    Code hash: {truncateStringInMiddle(state.codeHash, 8)}
-                  </Heading>
-                )}
-                <Widget
-                  src={`${state.ownerId}/widget/SourceScan.Verify.Github`}
-                  props={{
-                    rpcUrl: props.rpcUrl,
-                    theme: state.theme,
-                    apiHost: state.apiHost,
-                    appUrl: state.appUrl,
-                    contractId: state.contractId,
-                  }}
-                />
-              </>
-            ) : state.loading ? (
-              <Widget
-                src={`${state.ownerId}/widget/SourceScan.Common.Spinner`}
-                props={{ width: "64px", height: "64px" }}
-              />
-            ) : null}
-          </>
-        )}
-      </>
+    <Heading>1. Select contract to verify</Heading>
+    <SearchStack>
+      <Widget
+        src={`${state.ownerId}/widget/SourceScan.Inputs.SearchBar`}
+        props={{
+          inputWidth: "180px",
+          placeholder: "Account ID",
+          theme: state.theme,
+          handleSubmit: handleSubmit,
+          value: state.contractId,
+        }}
+      />
+    </SearchStack>
+    {state.error && state.error !== "NO_CONTRACT_CODE" ? (
+      <Widget
+        src={`${state.ownerId}/widget/SourceScan.Common.ErrorAlert`}
+        props={{
+          message: "Error while loading contract from rpc",
+        }}
+      />
     ) : (
-      <Heading>Please login to your account</Heading>
+      <>
+        <Heading>{state.contractId}</Heading>
+        {state.contractId ? (
+          <>
+            {state.error === "NO_CONTRACT_CODE" ? (
+              <Heading>No contract code found</Heading>
+            ) : (
+              <Heading>
+                Code hash: {truncateStringInMiddle(state.codeHash, 8)}
+              </Heading>
+            )}
+            <Widget
+              src={`${state.ownerId}/widget/SourceScan.Verify.Github`}
+              props={{
+                rpcUrl: props.rpcUrl,
+                theme: state.theme,
+                apiHost: state.apiHost,
+                appUrl: state.appUrl,
+                contractId: state.contractId,
+              }}
+            />
+          </>
+        ) : state.loading ? (
+          <Widget
+            src={`${state.ownerId}/widget/SourceScan.Common.Spinner`}
+            props={{ width: "64px", height: "64px" }}
+          />
+        ) : null}
+      </>
     )}
   </Stack>
 );
