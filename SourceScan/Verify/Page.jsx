@@ -29,6 +29,16 @@ State.init({
   codeHash: null,
 });
 
+const A = styled.a`
+  text-decoration: none;
+  color: ${state.theme.color};
+
+  :hover {
+    text-decoration: none;
+    color: ${state.theme.color};
+  }
+`;
+
 const Stack = styled.div`
   width: 100%;
   display: flex;
@@ -276,16 +286,24 @@ return (
       />
     ) : (
       <>
-        <Heading>{state.contractId}</Heading>
+        {state.contractId ? (
+          <HStack>
+            <Heading>{state.contractId}</Heading>
+            <A
+              href={`https://${
+                context.networkId === "mainnet" ? "" : "testnet."
+              }nearblocks.io/address/${state.contractId}`}
+              target={"_blank"}
+            >
+              <Widget
+                src={`${state.ownerId}/widget/SourceScan.Common.Icons.LinkIcon`}
+                props={{ width: "18px", height: "18px" }}
+              />
+            </A>
+          </HStack>
+        ) : null}
         {state.contractId ? (
           <>
-            {state.error === "NO_CONTRACT_CODE" ? (
-              <Heading>No contract code found</Heading>
-            ) : (
-              <Heading>
-                Code hash: {truncateStringInMiddle(state.codeHash, 8)}
-              </Heading>
-            )}
             <Widget
               src={`${state.ownerId}/widget/SourceScan.Verify.Github`}
               props={{

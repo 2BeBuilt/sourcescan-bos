@@ -257,9 +257,9 @@ const handleKeyGen = () => {
     body: JSON.stringify({
       key: state.key,
       lang: state.lang,
-      entry_point: state.entryPoint,
+      entryPoint: state.entryPoint,
       github: state.github,
-      account_id: props.contractId,
+      accountId: props.contractId,
     }),
   })
     .then((res) => {
@@ -289,32 +289,13 @@ const truncateStringInMiddle = (str, maxLength) => {
   return firstHalf + "..." + secondHalf;
 };
 
-const customUriEncode = (str) => {
-  const allowedChars =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.~";
-
-  let encodedStr = "";
-
-  for (let i = 0; i < str.length; i++) {
-    let char = str[i];
-
-    if (allowedChars.indexOf(char) !== -1) {
-      encodedStr += char;
-    } else {
-      let hexValue = char.charCodeAt(0).toString(16).toUpperCase();
-      encodedStr += "%" + (hexValue.length < 2 ? "0" + hexValue : hexValue);
-    }
-  }
-
-  return encodedStr;
-};
-
 const handleVerificationSelect = (verification) => {
   State.update({
     verification: verification,
   });
 };
 
+console.log(state);
 return (
   <Stack>
     <Heading>3. Select entry point</Heading>
@@ -352,8 +333,8 @@ return (
               <Widget
                 src={`${state.ownerId}/widget/SourceScan.Common.Icons.DockerIcon`}
                 props={{
-                  width: "64px",
-                  height: "64px",
+                  width: "40px",
+                  height: "40px",
                 }}
               />
             </div>
@@ -362,8 +343,8 @@ return (
               <Widget
                 src={`${state.ownerId}/widget/SourceScan.Common.Icons.KeyIcon`}
                 props={{
-                  width: "58px",
-                  height: "58px",
+                  width: "32px",
+                  height: "32px",
                 }}
               />
             </div>
@@ -381,7 +362,7 @@ return (
                 deployment
               </Heading>
               <A
-                href={`${state.appUrl}/gateway?key=${customUriEncode(
+                href={`${state.appUrl}/gateway?key=${encodeURIComponent(
                   state.gatewayKey
                 )}`}
                 target={"_blank"}

@@ -24,6 +24,7 @@ State.init({
     },
   },
   loading: false,
+  importLoading: false,
   error: false,
   user: null,
   repo: null,
@@ -320,6 +321,7 @@ const handleCommitSelect = (commit) => {
 
 const handleImport = () => {
   if (!state.selectedCommit) return;
+  State.update({ importLoading: true });
 
   asyncFetch(`${state.apiHost}/api/temp/github`, {
     headers: {
@@ -343,7 +345,7 @@ const handleImport = () => {
       }
     })
     .finally(() => {
-      State.update({ loading: false });
+      State.update({ importLoading: false });
     });
 };
 
@@ -394,7 +396,16 @@ return (
                 }}
               />
               {state.selectedCommit ? (
-                <Button onClick={handleImport}>Select</Button>
+                <Button onClick={handleImport}>
+                  {!state.importLoading ? (
+                    "Select"
+                  ) : (
+                    <Widget
+                      src={`${state.ownerId}/widget/SourceScan.Common.Spinner`}
+                      props={{ width: "20px", height: "20px" }}
+                    />
+                  )}
+                </Button>
               ) : null}
             </ImportStack>
             {state.branches ? (
