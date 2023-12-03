@@ -21,8 +21,8 @@ const pages = [
   },
   {
     label: "Docs",
-    href: `#/${state.ownerId}/widget/SourceScan?page=docs`,
-    target: "_self",
+    href: `https://docs.sourcescan.dev/introduction/sourcescan`,
+    target: "_blank",
     icon: `${state.ownerId}/widget/SourceScan.Common.Icons.DocsIcon`,
   },
 ];
