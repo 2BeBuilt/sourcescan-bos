@@ -24,7 +24,7 @@ State.init({
     },
   },
   github: props.github,
-  key: props.key,
+  accessToken: props.accessToken,
   files: props.files,
   entryPoint: null,
   lang: "rust",
@@ -52,11 +52,11 @@ if (!props.github) {
         "Please provide github: {repo: string, owner: string, sha: string} to the component",
     }}
   />;
-} else if (!props.key) {
+} else if (!props.accessToken) {
   <Widget
     src={`${state.ownerId}/widget/SourceScan.Common.ErrorAlert`}
     props={{
-      message: "Please provide key: string to the component",
+      message: "Please provide accessToken: string to the component",
     }}
   />;
 } else if (!props.files) {
@@ -255,7 +255,7 @@ const handleKeyGen = () => {
     },
     method: "POST",
     body: JSON.stringify({
-      key: state.key,
+      accessToken: state.accessToken,
       lang: state.lang,
       entryPoint: state.entryPoint,
       github: state.github,

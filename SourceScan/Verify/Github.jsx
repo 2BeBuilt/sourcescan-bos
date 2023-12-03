@@ -33,7 +33,7 @@ State.init({
   selectedPage: 1,
   commits: null,
   selectedCommit: null,
-  key: null,
+  accessToken: null,
   files: null,
 });
 
@@ -339,7 +339,7 @@ const handleImport = () => {
         State.update({ error: true });
       } else {
         State.update({
-          key: res.body.key,
+          accessToken: res.body.accessToken,
           files: res.body.files,
         });
       }
@@ -348,7 +348,7 @@ const handleImport = () => {
       State.update({ importLoading: false });
     });
 };
-
+console.log(state);
 const truncateStringInMiddle = (str, maxLength) => {
   if (str.length <= maxLength) {
     return str;
@@ -363,7 +363,7 @@ const truncateStringInMiddle = (str, maxLength) => {
 
 return (
   <Stack>
-    {!state.key && !state.files ? (
+    {!state.accessToken && !state.files ? (
       <>
         <Heading>2. Specify source code GitHub repo</Heading>
         <SearchStack>
@@ -464,7 +464,7 @@ return (
         props={{
           appUrl: state.appUrl,
           contractId: props.contractId,
-          key: state.key,
+          accessToken: state.accessToken,
           files: state.files,
           github: {
             repo: state.repo.name,
