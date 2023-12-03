@@ -348,7 +348,7 @@ const handleImport = () => {
       State.update({ importLoading: false });
     });
 };
-console.log(state);
+
 const truncateStringInMiddle = (str, maxLength) => {
   if (str.length <= maxLength) {
     return str;
