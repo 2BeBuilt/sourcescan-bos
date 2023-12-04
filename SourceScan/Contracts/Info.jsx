@@ -194,7 +194,7 @@ const truncateStringInMiddle = (str, maxLength) => {
   return firstHalf + "..." + secondHalf;
 };
 
-const wasmCheck = () => {
+const compareCodeHash = () => {
   const options = {
     method: "POST",
     headers: {
@@ -213,28 +213,26 @@ const wasmCheck = () => {
   };
   asyncFetch(state.rpcUrl, options)
     .then((rpc_res) => {
-      asyncFetch(`${state.apiHost}/ipfs/${state.contract.cid}/wasm_code_base64`)
-        .then((ipfs_res) => {
-          State.update({
-            wasm: {
-              value: rpc_res.body.result.code_base64 === ipfs_res.body,
-              error: false,
-            },
-          });
-        })
-        .catch((err) => {
-          console.log(err);
-          State.update({
-            wasm: {
-              value: null,
-              error: true,
-            },
-          });
+      if (rpc_res.body.result.hash === state.contract.code_hash) {
+        State.update({
+          wasm: {
+            value: true,
+            error: false,
+          },
         });
+      } else {
+        State.update({
+          wasm: {
+            value: false,
+            error: false,
+          },
+        });
+      }
     })
     .catch((err) => {
       State.update({
         wasm: {
+          value: null,
           error: true,
         },
       });
@@ -242,34 +240,12 @@ const wasmCheck = () => {
     });
 };
 
-const txCheck = () => {
-  asyncFetch(`${state.apiHost}/api/ipfs/getTxHash`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: `{ "cid": "${state.contract.cid}" }`,
-  })
-    .then((res) => {
-      State.update({
-        tx: {
-          value: res.body.tx_hash === state.contract.deploy_tx,
-          error: false,
-        },
-      });
-    })
-    .catch((err) => {
-      console.log(err);
-      State.update({
-        tx: { value: null, error: true },
-      });
-    });
-};
-
 if (state.contract) {
-  wasmCheck();
-  txCheck();
+  console.log(state.contract);
+  compareCodeHash();
 }
+
+console.log(state.wasm);
 
 return (
   <Center>
@@ -327,35 +303,6 @@ return (
               <Text>
                 Wasm Code {state.wasm.value ? "Matches" : "Mismatches"}
               </Text>
-            </HStack>
-            <HStack>
-              {state.tx.value === null ? (
-                <Widget
-                  src={`${state.ownerId}/widget/SourceScan.Common.Spinner`}
-                />
-              ) : state.tx.value ? (
-                <Widget
-                  src={`${state.ownerId}/widget/SourceScan.Common.Icons.CheckIcon`}
-                  props={{
-                    width: "20px",
-                    height: "20px",
-                    tooltip: { placement: props.placement, label: "Approved" },
-                  }}
-                />
-              ) : (
-                <Widget
-                  src={`${state.ownerId}/widget/SourceScan.Common.Icons.CrossIcon`}
-                  props={{
-                    width: "20px",
-                    height: "20px",
-                    tooltip: {
-                      placement: props.placement,
-                      label: state.tx.error ? "Error" : "Not approved",
-                    },
-                  }}
-                />
-              )}
-              <Text>Deploy Tx {state.tx.value ? "Matches" : "Mismatches"}</Text>
             </HStack>
           </Stack>
         </Stack>
