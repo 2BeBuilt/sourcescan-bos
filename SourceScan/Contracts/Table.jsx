@@ -3,6 +3,8 @@ const useNetwork = (mainnet, testnet) => {
 };
 
 State.init({
+  verifierId:
+    props.verifierId || useNetwork("sourcescan.near", "sourcescan.testnet"),
   contracts: props.contracts,
   theme: props.theme || {
     name: "light",
@@ -241,6 +243,7 @@ return (
                         <Widget
                           src={`${state.ownerId}/widget/SourceScan.Contracts.Approved`}
                           props={{
+                            verifierId: state.verifierId,
                             rpcUrl: props.rpcUrl,
                             apiHost: props.apiHost,
                             accountId: contractId,

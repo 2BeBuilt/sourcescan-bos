@@ -3,12 +3,14 @@ const useNetwork = (mainnet, testnet) => {
 };
 
 State.init({
+  verifierId:
+    props.verifierId || useNetwork("sourcescan.near", "sourcescan.testnet"),
   ownerId: useNetwork("sourcescan.near", "sourcescan.testnet"),
   value: null,
   error: false,
 });
 
-const compareWasm = () => {
+const compareCodeHash = () => {
   const options = {
     method: "POST",
     headers: {
@@ -27,28 +29,14 @@ const compareWasm = () => {
   };
   asyncFetch(props.rpcUrl, options)
     .then((rpc_res) => {
-      asyncFetch(`${props.apiHost}/ipfs/${props.cid}/wasm_code_base64`)
-        .then((ipfs_res) => {
-          if (rpc_res.body.result.code_base64 !== ipfs_res.body) {
-            State.update({
-              value: false,
-            });
-            return;
+      Near.asyncView(state.verifierId, "get_contract", {
+        account_id: props.accountId,
+      })
+        .then((res) => {
+          if (rpc_res.body.result.hash === res.code_hash) {
+            State.update({ value: true });
           } else {
-            asyncFetch(`${props.apiHost}/api/ipfs/getTxHash`, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: `{ "cid": "${props.cid}" }`,
-            })
-              .then((res) => {
-                State.update({ value: res.body.tx_hash === props.deploy_tx });
-              })
-              .catch((err) => {
-                console.log(err);
-                State.update({ error: true });
-              });
+            State.update({ value: false });
           }
         })
         .catch((err) => {
@@ -60,7 +48,7 @@ const compareWasm = () => {
     });
 };
 
-compareWasm();
+compareCodeHash();
 
 return (
   <>
