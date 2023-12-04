@@ -194,6 +194,12 @@ const truncateStringInMiddle = (str, maxLength) => {
   return firstHalf + "..." + secondHalf;
 };
 
+const truncateAfterSplit = (str, maxLength) => {
+  const [firstPart, secondPart] = str.split("@");
+
+  return firstPart + "@" + truncateStringInMiddle(secondPart, maxLength);
+};
+
 const compareCodeHash = () => {
   const options = {
     method: "POST",
@@ -327,7 +333,7 @@ return (
                 clipboard.writeText(state.contract.builder_image);
               }}
             >
-              {truncateStringInMiddle(state.contract.builder_image, 12)}
+              {truncateAfterSplit(state.contract.builder_image, 8)}
             </TooltipText>
           </OverlayTrigger>
         </Stack>

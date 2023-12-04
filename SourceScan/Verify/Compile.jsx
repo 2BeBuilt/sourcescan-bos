@@ -29,9 +29,15 @@ State.init({
   entryPoint: null,
   lang: "rust",
   loading: false,
+  verifyLoading: false,
+  verifyError: null,
+  verifySuccess: null,
   error: false,
   gatewayKey: null,
   verification: null,
+  builderImage: null,
+  dockerTutorial: false,
+  uploadToIpfs: false,
 });
 
 const clearState = () => {
@@ -41,6 +47,17 @@ const clearState = () => {
     loading: false,
     error: false,
     gatewayKey: null,
+  });
+};
+
+const clearVerifierState = () => {
+  State.update({
+    verification: null,
+    builderImage: null,
+    dockerTutorial: false,
+    uploadToIpfs: false,
+    verifyError: null,
+    verifyLoading: false,
   });
 };
 
@@ -161,6 +178,20 @@ const DeployStack = styled.div`
   gap: 25px;
 `;
 
+const VerificationStack = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  gap: 25px;
+
+  @media only screen and (max-width: 750px) {
+    width: 20%;
+  }
+`;
+
 const HStack = styled.div`
   width: 100%;
   display: flex;
@@ -198,6 +229,29 @@ const Select = styled.select`
   }
 `;
 
+const Checkbox = styled.input`
+  accent-color: ${state.theme.primaryColor};
+  width: 20px;
+  height: 20px;
+  border: 2px solid ${state.theme.border};
+  border-radius: 4px;
+  transition: border-color 0.1s ease-in-out, background-color 0.1s ease-in-out;
+
+  :checked {
+    background-color: ${state.theme.checked.bg};
+    border-color: ${state.theme.checked.border};
+  }
+
+  :hover {
+    border-color: ${state.theme.hover.border};
+  }
+
+  :focus {
+    outline: none;
+    box-shadow: 0 0 0 2px ${state.theme.focus.shadow};
+  }
+`;
+
 const Button = styled.button`
   font-weight: 600;
   border-radius: 6px;
@@ -210,6 +264,12 @@ const Button = styled.button`
   :hover {
     background-color: ${state.theme.hover.bg};
   }
+`;
+
+const TooltipText = styled.div`
+  cursor: pointer;
+  font-size: ${state.theme.text.fontSize};
+  color: ${state.theme.color};
 `;
 
 const A = styled.a`
@@ -277,6 +337,31 @@ const handleKeyGen = () => {
     });
 };
 
+const getBuilderImageInfo = () => {
+  if (state.loading || state.error || !props.contractId) return;
+
+  State.update({
+    loading: true,
+  });
+
+  asyncFetch(`${state.apiHost}/api/verify/builderInfo`, {
+    method: "GET",
+  })
+    .then((res) => {
+      if (res.status !== 200) {
+        clearState();
+        State.update({ error: true });
+      } else {
+        State.update({
+          builderImage: res.body.builderImage,
+        });
+      }
+    })
+    .finally(() => {
+      State.update({ loading: false });
+    });
+};
+
 const truncateStringInMiddle = (str, maxLength) => {
   if (str.length <= maxLength) {
     return str;
@@ -290,9 +375,64 @@ const truncateStringInMiddle = (str, maxLength) => {
 };
 
 const handleVerificationSelect = (verification) => {
+  if (verification === "Docker") getBuilderImageInfo();
+
   State.update({
     verification: verification,
   });
+};
+
+const truncateAfterSplit = (str, maxLength) => {
+  const [firstPart, secondPart] = str.split("@");
+
+  return firstPart + "@" + truncateStringInMiddle(secondPart, maxLength);
+};
+
+const handleDockerCheckBoxChange = () => {
+  State.update({ dockerTutorial: !state.dockerTutorial });
+};
+
+const handleIPFSCheckBoxChange = () => {
+  State.update({ uploadToIpfs: !state.uploadToIpfs });
+};
+
+const verify = () => {
+  if (state.verifyLoading || !props.contractId) return;
+
+  State.update({
+    verifyLoading: true,
+  });
+
+  asyncFetch(`${state.apiHost}/api/verify/${state.lang}`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${state.accessToken}`,
+    },
+    method: "POST",
+    body: JSON.stringify({
+      accountId: props.contractId,
+      networkId: context.networkId,
+      entryPoint: state.entryPoint,
+      github: state.github,
+      uploadToIpfs: state.uploadToIpfs,
+      accountId: props.contractId,
+    }),
+  })
+    .then((res) => {
+      console.log(res);
+      if (res.body.message !== "Contract verified successfully") {
+        State.update({
+          verifyError: res.body.message ? res.body.message : "Error ocurred",
+        });
+      } else {
+        State.update({
+          verifySuccess: res.body.message,
+        });
+      }
+    })
+    .finally(() => {
+      State.update({ verifyLoading: false });
+    });
 };
 
 return (
@@ -326,7 +466,7 @@ return (
           </option>
         </Select>
         <Heading>5. How to verify</Heading>
-        <HStack>
+        <VerificationStack>
           <div onClick={() => handleVerificationSelect("Docker")}>
             <Widget
               src={`${state.ownerId}/widget/SourceScan.Common.Icons.DockerIcon`}
@@ -346,10 +486,89 @@ return (
               }}
             />
           </div>
-        </HStack>
+        </VerificationStack>
         {state.verification === "Docker" ? (
           <>
-            <Heading>Coming soon...</Heading>
+            {state.loading ? (
+              <Widget
+                src={`${state.ownerId}/widget/SourceScan.Common.Spinner`}
+                props={{ width: "20px", height: "20px" }}
+              />
+            ) : (
+              <>
+                <HStack>
+                  <Text>{"Builder image: "}</Text>
+                  <OverlayTrigger
+                    key={"top"}
+                    placement={"top"}
+                    overlay={<Tooltip id={`tooltip-top`}>Copy</Tooltip>}
+                  >
+                    <TooltipText
+                      onClick={() => {
+                        clipboard.writeText(state.builderImage);
+                      }}
+                    >
+                      {truncateAfterSplit(state.builderImage, 8)}
+                    </TooltipText>
+                  </OverlayTrigger>
+                </HStack>
+                <Stack>
+                  <HStack>
+                    {state.dockerTutorial ? (
+                      <SelectedRButton onClick={handleDockerCheckBoxChange} />
+                    ) : (
+                      <RButton onClick={handleDockerCheckBoxChange} />
+                    )}
+                    <Text>All steps done from</Text>
+                    <a
+                      href={
+                        "https://docs.sourcescan.dev/tutorials/docker-verification"
+                      }
+                      target={"_blank"}
+                    >
+                      tutorial
+                    </a>
+                  </HStack>
+                  <HStack>
+                    {state.uploadToIpfs ? (
+                      <SelectedRButton
+                        onClick={() => handleIPFSCheckBoxChange()}
+                      />
+                    ) : (
+                      <RButton onClick={() => handleIPFSCheckBoxChange()} />
+                    )}
+                    <Text>Upload to IPFS</Text>
+                  </HStack>
+                </Stack>
+                {state.dockerTutorial ? (
+                  <Button onClick={verify} disabled={state.verifyLoading}>
+                    {!state.verifyLoading ? (
+                      "Verify"
+                    ) : (
+                      <Widget
+                        src={`${state.ownerId}/widget/SourceScan.Common.Spinner`}
+                        props={{ width: "20px", height: "20px" }}
+                      />
+                    )}
+                  </Button>
+                ) : null}
+                {state.verifyError ? (
+                  <Widget
+                    src={`${state.ownerId}/widget/SourceScan.Common.ErrorAlert`}
+                    props={{
+                      message: state.verifyError,
+                    }}
+                  />
+                ) : state.verifySuccess ? (
+                  <Widget
+                    src={`${state.ownerId}/widget/SourceScan.Common.SuccessAlert`}
+                    props={{
+                      message: state.verifySuccess,
+                    }}
+                  />
+                ) : null}
+              </>
+            )}
           </>
         ) : state.verification === "FAK" ? (
           state.gatewayKey ? (

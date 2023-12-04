@@ -89,6 +89,15 @@ const Commit = styled.div`
   }
 `;
 
+const NHStack = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: 5px;
+`;
+
 const CommitsContainer = styled.div`
   height: 100%;
   padding: 10px;
@@ -287,7 +296,7 @@ return (
     ) : (
       <>
         {state.contractId ? (
-          <HStack>
+          <NHStack>
             <Heading>{state.contractId}</Heading>
             <A
               href={`https://${
@@ -300,7 +309,7 @@ return (
                 props={{ width: "18px", height: "18px" }}
               />
             </A>
-          </HStack>
+          </NHStack>
         ) : null}
         {state.contractId ? (
           <>
