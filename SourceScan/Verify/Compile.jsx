@@ -47,11 +47,6 @@ const clearState = () => {
     loading: false,
     error: false,
     gatewayKey: null,
-  });
-};
-
-const clearVerifierState = () => {
-  State.update({
     verification: null,
     builderImage: null,
     dockerTutorial: false,
@@ -302,8 +297,7 @@ const handleLangChange = (e) => {
 };
 
 const handleKeyGen = () => {
-  if (state.loading || state.gatewayKey || state.error || !props.contractId)
-    return;
+  if (state.loading || state.gatewayKey || !props.contractId) return;
 
   State.update({
     loading: true,
@@ -324,7 +318,6 @@ const handleKeyGen = () => {
   })
     .then((res) => {
       if (res.status !== 200) {
-        clearState();
         State.update({ error: true });
       } else {
         State.update({
@@ -573,10 +566,6 @@ return (
         ) : state.verification === "FAK" ? (
           state.gatewayKey ? (
             <DeployStack>
-              <Heading>
-                You will be redirected to another site for compilation and
-                deployment
-              </Heading>
               <A
                 href={`${state.appUrl}/gateway?key=${encodeURIComponent(
                   state.gatewayKey
@@ -587,16 +576,26 @@ return (
               </A>
             </DeployStack>
           ) : (
-            <Button onClick={handleKeyGen} disabled={state.loading}>
-              {!state.loading ? (
-                "Generate Key"
-              ) : (
+            <>
+              <Button onClick={handleKeyGen} disabled={state.loading}>
+                {!state.loading ? (
+                  "Generate Key"
+                ) : (
+                  <Widget
+                    src={`${state.ownerId}/widget/SourceScan.Common.Spinner`}
+                    props={{ width: "20px", height: "20px" }}
+                  />
+                )}
+              </Button>
+              {state.error ? (
                 <Widget
-                  src={`${state.ownerId}/widget/SourceScan.Common.Spinner`}
-                  props={{ width: "20px", height: "20px" }}
+                  src={`${state.ownerId}/widget/SourceScan.Common.ErrorAlert`}
+                  props={{
+                    message: "Error ocurred during key generation",
+                  }}
                 />
-              )}
-            </Button>
+              ) : null}
+            </>
           )
         ) : null}
       </>
