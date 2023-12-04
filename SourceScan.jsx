@@ -15,7 +15,7 @@ const getConfig = (network) => {
         appUrl: "https://v2.sourcescan.dev",
         ownerId: "sourcescan.near",
         rpcUrl: "https://rpc.mainnet.near.org",
-        contractId: "sourcescan.near",
+        contractId: "dev.sourcescan.near",
         apiHost: "https://api.sourcescan.dev",
       };
     case "testnet":
@@ -224,6 +224,7 @@ const pages = {
         src={`${state.config.ownerId}/widget/SourceScan.Contracts.Table`}
         props={{
           theme: useTheme(light, dark),
+          verifierId: state.config.contractId,
           contracts: state.contracts,
           rpcUrl: state.config.rpcUrl,
           apiHost: state.config.apiHost,
@@ -244,6 +245,7 @@ const pages = {
     <Widget
       src={`${state.config.ownerId}/widget/SourceScan.Contracts.Info`}
       props={{
+        verifierId: state.config.contractId,
         apiHost: state.config.apiHost,
         contractId: props.contractId,
         theme: useTheme(

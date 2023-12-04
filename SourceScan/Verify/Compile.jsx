@@ -295,7 +295,6 @@ const handleVerificationSelect = (verification) => {
   });
 };
 
-console.log(state);
 return (
   <Stack>
     <Heading>3. Select entry point</Heading>
@@ -328,27 +327,25 @@ return (
         </Select>
         <Heading>5. How to verify</Heading>
         <HStack>
-          <HeadingStack>
-            <div onClick={() => handleVerificationSelect("Docker")}>
-              <Widget
-                src={`${state.ownerId}/widget/SourceScan.Common.Icons.DockerIcon`}
-                props={{
-                  width: "40px",
-                  height: "40px",
-                }}
-              />
-            </div>
-            <Heading>or</Heading>
-            <div onClick={() => handleVerificationSelect("FAK")}>
-              <Widget
-                src={`${state.ownerId}/widget/SourceScan.Common.Icons.KeyIcon`}
-                props={{
-                  width: "32px",
-                  height: "32px",
-                }}
-              />
-            </div>
-          </HeadingStack>
+          <div onClick={() => handleVerificationSelect("Docker")}>
+            <Widget
+              src={`${state.ownerId}/widget/SourceScan.Common.Icons.DockerIcon`}
+              props={{
+                width: "40px",
+                height: "40px",
+              }}
+            />
+          </div>
+          <Heading>or</Heading>
+          <div onClick={() => handleVerificationSelect("FAK")}>
+            <Widget
+              src={`${state.ownerId}/widget/SourceScan.Common.Icons.KeyIcon`}
+              props={{
+                width: "32px",
+                height: "32px",
+              }}
+            />
+          </div>
         </HStack>
         {state.verification === "Docker" ? (
           <>

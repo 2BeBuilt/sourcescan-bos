@@ -3,6 +3,8 @@ const useNetwork = (mainnet, testnet) => {
 };
 
 State.init({
+  verifierId:
+    props.verifierId || useNetwork("sourcescan.near", "sourcescan.testnet"),
   ownerId: useNetwork("sourcescan.near", "sourcescan.testnet"),
   apiHost: props.apiHost || "https://sourcescan-api.2bb.dev",
   rpcUrl: useNetwork(
@@ -28,8 +30,8 @@ State.init({
 });
 
 const getContract = async () => {
-  Near.asyncView(state.ownerId, "get_contract", {
-    contract_id: props.contractId,
+  Near.asyncView(state.verifierId, "get_contract", {
+    account_id: props.contractId,
   })
     .then((res) => {
       State.update({
@@ -69,6 +71,7 @@ const Main = styled.div`
     text-align: center;
     align-items: center;
     justify-content: center;
+    width: 95%;
   }
 `;
 
@@ -116,6 +119,12 @@ const UHeading = styled.div`
   text-underline-offset: 6px;
   text-decoration-style: dashed;
   text-decoration-color: gray;
+`;
+
+const TooltipText = styled.div`
+  cursor: pointer;
+  font-size: ${state.theme.text.fontSize};
+  color: ${state.theme.color};
 `;
 
 const Heading = styled.div`
@@ -351,26 +360,29 @@ return (
           </Stack>
         </Stack>
         <Stack>
-          <UHeading>Deploy Tx</UHeading>
-          <HStack>
-            <Desktop>
-              <Text>{state.contract.deploy_tx}</Text>
-            </Desktop>
-            <Mobile>
-              <Text>{truncateStringInMiddle(state.contract.deploy_tx, 8)}</Text>
-            </Mobile>
-            <A
-              href={`https://${
-                context.networkId === "mainnet" ? "" : "testnet."
-              }nearblocks.io/txns/${state.contract.deploy_tx}`}
-              target={"_blank"}
+          <UHeading>Code hash</UHeading>
+          <Desktop>
+            <Text>{state.contract.code_hash}</Text>
+          </Desktop>
+          <Mobile>
+            <Text>{truncateStringInMiddle(state.contract.code_hash, 12)}</Text>
+          </Mobile>
+        </Stack>
+        <Stack>
+          <UHeading>Builder image</UHeading>
+          <OverlayTrigger
+            key={"top"}
+            placement={"top"}
+            overlay={<Tooltip id={`tooltip-top`}>Copy</Tooltip>}
+          >
+            <TooltipText
+              onClick={() => {
+                clipboard.writeText(state.contract.builder_image);
+              }}
             >
-              <Widget
-                src={`${state.ownerId}/widget/SourceScan.Common.Icons.LinkIcon`}
-                props={{ width: "18px", height: "18px" }}
-              />
-            </A>
-          </HStack>
+              {truncateStringInMiddle(state.contract.builder_image, 12)}
+            </TooltipText>
+          </OverlayTrigger>
         </Stack>
         <Stack>
           <UHeading>Entry Point</UHeading>
