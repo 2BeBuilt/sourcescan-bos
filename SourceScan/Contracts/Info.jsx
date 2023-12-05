@@ -251,7 +251,17 @@ if (state.contract) {
   compareCodeHash();
 }
 
-console.log(state.wasm);
+const formatSourceCodePath = (path) => {
+  let segments = path.split("/");
+
+  segments.shift();
+  segments.pop();
+  if (state.contract.lang === "rust") {
+    segments.push("src", "lib.rs");
+  }
+
+  return segments.join("/");
+};
 
 return (
   <Center>
@@ -311,6 +321,25 @@ return (
               </Text>
             </HStack>
           </Stack>
+        </Stack>
+        <Stack>
+          <UHeading>Source Code</UHeading>
+          <HStack>
+            <Text>Github</Text>
+            <A
+              href={`https://github.com/${state.contract.github.owner}/${
+                state.contract.github.repo
+              }/tree/${state.contract.github.sha}/${formatSourceCodePath(
+                state.contract.entry_point
+              )}`}
+              target={"_blank"}
+            >
+              <Widget
+                src={`${state.ownerId}/widget/SourceScan.Common.Icons.LinkIcon`}
+                props={{ width: "18px", height: "18px" }}
+              />
+            </A>
+          </HStack>
         </Stack>
         <Stack>
           <UHeading>Code hash</UHeading>
