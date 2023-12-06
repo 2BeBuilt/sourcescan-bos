@@ -344,7 +344,7 @@ return (
             </A>
           </HStack>
           <HStack>
-            <Text>IPFS</Text>
+            <Text>Code Viewer(IPFS)</Text>
             <A
               href={`${state.appUrl}/code/${props.contractId}`}
               target={"_blank"}
