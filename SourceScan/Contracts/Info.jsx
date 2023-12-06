@@ -393,26 +393,28 @@ return (
           <UHeading>Lang</UHeading>
           <Text>{state.contract.lang === "ts" ? "TypeScript" : "Rust"}</Text>
         </Stack>
-        <Stack>
-          <UHeading>IPFS</UHeading>
-          <HStack>
-            <Desktop>
-              <Text>{state.contract.cid}</Text>
-            </Desktop>
-            <Mobile>
-              <Text>{truncateStringInMiddle(state.contract.cid, 8)}</Text>
-            </Mobile>
-            <A
-              href={`${state.apiHost}/ipfs/${state.contract.cid}`}
-              target={"_blank"}
-            >
-              <Widget
-                src={`${state.ownerId}/widget/SourceScan.Common.Icons.LinkIcon`}
-                props={{ width: "18px", height: "18px" }}
-              />
-            </A>
-          </HStack>
-        </Stack>
+        {state.contract.cid ? (
+          <Stack>
+            <UHeading>IPFS</UHeading>
+            <HStack>
+              <Desktop>
+                <Text>{state.contract.cid}</Text>
+              </Desktop>
+              <Mobile>
+                <Text>{truncateStringInMiddle(state.contract.cid, 8)}</Text>
+              </Mobile>
+              <A
+                href={`${state.apiHost}/ipfs/${state.contract.cid}`}
+                target={"_blank"}
+              >
+                <Widget
+                  src={`${state.ownerId}/widget/SourceScan.Common.Icons.LinkIcon`}
+                  props={{ width: "18px", height: "18px" }}
+                />
+              </A>
+            </HStack>
+          </Stack>
+        ) : null}
         {state.contract.github ? (
           <Stack>
             <UHeading>Github</UHeading>
