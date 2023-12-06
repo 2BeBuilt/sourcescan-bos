@@ -406,7 +406,6 @@ const verify = () => {
       accountId: props.contractId,
       networkId: context.networkId,
       entryPoint: state.entryPoint,
-      github: state.github,
       uploadToIpfs: state.uploadToIpfs,
       accountId: props.contractId,
     }),
