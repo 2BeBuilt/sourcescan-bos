@@ -247,6 +247,7 @@ const pages = {
       props={{
         verifierId: state.config.contractId,
         apiHost: state.config.apiHost,
+        appUrl: state.config.appUrl,
         contractId: props.contractId,
         theme: useTheme(
           {

@@ -7,6 +7,9 @@ State.init({
     props.verifierId || useNetwork("sourcescan.near", "sourcescan.testnet"),
   ownerId: useNetwork("sourcescan.near", "sourcescan.testnet"),
   apiHost: props.apiHost || "https://sourcescan-api.2bb.dev",
+  appUrl:
+    props.appUrl ||
+    useNetwork("https://sourcescan.dev", "https://testnet.sourcescan.dev"),
   rpcUrl: useNetwork(
     "https://rpc.mainnet.near.org",
     "https://rpc.testnet.near.org"
@@ -332,6 +335,18 @@ return (
               }/tree/${state.contract.github.sha}/${formatSourceCodePath(
                 state.contract.entry_point
               )}`}
+              target={"_blank"}
+            >
+              <Widget
+                src={`${state.ownerId}/widget/SourceScan.Common.Icons.LinkIcon`}
+                props={{ width: "18px", height: "18px" }}
+              />
+            </A>
+          </HStack>
+          <HStack>
+            <Text>IPFS</Text>
+            <A
+              href={`${state.appUrl}/code/${props.contractId}`}
               target={"_blank"}
             >
               <Widget
