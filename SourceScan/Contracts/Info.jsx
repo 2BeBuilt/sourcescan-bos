@@ -343,18 +343,20 @@ return (
               />
             </A>
           </HStack>
-          <HStack>
-            <Text>Code Viewer(IPFS)</Text>
-            <A
-              href={`${state.appUrl}/code/${props.contractId}`}
-              target={"_blank"}
-            >
-              <Widget
-                src={`${state.ownerId}/widget/SourceScan.Common.Icons.LinkIcon`}
-                props={{ width: "18px", height: "18px" }}
-              />
-            </A>
-          </HStack>
+          {state.contract.cid ? (
+            <HStack>
+              <Text>Code Viewer(IPFS)</Text>
+              <A
+                href={`${state.appUrl}/code/${props.contractId}`}
+                target={"_blank"}
+              >
+                <Widget
+                  src={`${state.ownerId}/widget/SourceScan.Common.Icons.LinkIcon`}
+                  props={{ width: "18px", height: "18px" }}
+                />
+              </A>
+            </HStack>
+          ) : null}
         </Stack>
         <Stack>
           <UHeading>Code hash</UHeading>
