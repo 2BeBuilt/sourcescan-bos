@@ -108,7 +108,7 @@ const DropDown = styled.div`
 
 const appHref = (network) => {
   return network === "mainnet"
-    ? "https://near.social/sourcescan.testnet/widget/SourceScan"
+    ? "https://near.social/sourcescan.near/widget/SourceScan"
     : "https://test.near.social/sourcescan.testnet/widget/SourceScan";
 };
 
