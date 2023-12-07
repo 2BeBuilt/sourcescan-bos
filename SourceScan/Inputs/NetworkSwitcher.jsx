@@ -108,8 +108,8 @@ const DropDown = styled.div`
 
 const appHref = (network) => {
   return network === "mainnet"
-    ? "https://near.org/sourcescan.near/widget/SourceScan"
-    : "https://test.near.org/sourcescan.testnet/widget/SourceScan";
+    ? "https://near.social/sourcescan.testnet/widget/SourceScan"
+    : "https://test.near.social/sourcescan.testnet/widget/SourceScan";
 };
 
 return (
