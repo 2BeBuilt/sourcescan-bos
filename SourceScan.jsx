@@ -12,7 +12,7 @@ const getConfig = (network) => {
   switch (network) {
     case "mainnet":
       return {
-        appUrl: "https://v2.sourcescan.dev",
+        appUrl: "https://sourcescan.dev",
         ownerId: "sourcescan.near",
         rpcUrl: "https://rpc.mainnet.near.org",
         contractId: "dev.sourcescan.near",
@@ -20,11 +20,11 @@ const getConfig = (network) => {
       };
     case "testnet":
       return {
-        appUrl: "https://sourcescan.testnet.2bb.dev",
+        appUrl: "https://testnet.sourcescan.dev",
         ownerId: "sourcescan.testnet",
         rpcUrl: "https://rpc.testnet.near.org",
-        contractId: "sourcescan.testnet",
-        apiHost: "https://sourcescan-api.2bb.dev",
+        contractId: "dev.sourcescan.testnet",
+        apiHost: "https://api.sourcescan.dev",
       };
     default:
       throw Error(`Unconfigured environment '${network}'.`);
